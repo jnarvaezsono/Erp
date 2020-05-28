@@ -1932,7 +1932,7 @@ class M_manager extends VS_Model {
         return $result->row();
     }
 
-    function GetOrdenPpto($ppto, $tipo, $pre_order) {
+    function GetOrdenPpto($ppto, $tipo, $pre_order = false) {
         
         if(!$pre_order){
             $this->db->where('doc_id', $ppto);
