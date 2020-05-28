@@ -511,7 +511,7 @@ class C_Ppto extends Controller {
         $ppto = $this->input->post('ppto');
         $total = $this->input->post('total');
         $tipo = $this->input->post('tipo');
-        $table = $this->input->post('tabla');
+
         if ($tipo != 7) {
             $this->M_Manager->UpdateOrder($this->input->post('ord_id'), array('pvcl_id_prov' => $this->input->post('pvcl_id_prov'),'ord_observacion' => $this->input->post('ord_observacion')));
             unset($_POST['ord_observacion']);
@@ -528,51 +528,61 @@ class C_Ppto extends Controller {
                 $_POST['usr_id_mod'] = $this->session->UserMedios;
 
                 $field_id = 'psav_id';
+                $table = 'presup_avisos';
                 break;
             case 2:
                 $_POST['usr_id_mod'] = $this->session->UserMedios;
 
                 $field_id = 'pscf_id';
+                $table = 'presup_clasificados';
                 break;
             case 3:
                 $_POST['usr_id_mod'] = $this->session->UserMedios;
 
                 $field_id = 'psrev_id';
+                $table = 'presup_revis';
                 break;
             case 4:
                 $_POST['usr_mod'] = $this->session->UserMedios;
 
                 $field_id = 'psrad_id';
+                $table = 'presup_radio';
                 break;
             case 5:
                 $_POST['usr_id_mod'] = $this->session->UserMedios;
 
                 $field_id = 'pstv_id';
+                $table = 'presup_tv';
                 break;
             case 6:
                 $_POST['usr_id_mod'] = $this->session->UserMedios;
 
                 $field_id = 'psex_id';
+                $table = 'presup_prode';
                 break;
             case 7:
                 $_POST['usr_id_mod'] = $this->session->UserMedios;
 
                 $field_id = 'psin_id';
+                $table = 'presup_prodi';
                 break;
             case 8:
                 $_POST['usr_mod'] = $this->session->UserMedios;
 
                 $field_id = 'pubext_id';
+                $table = 'publicidad_exterior';
                 break;
             case 9:
                 $_POST['usr_mod'] = $this->session->UserMedios;
 
                 $field_id = 'imp_id';
+                $table = 'impresos';
                 break;
             case 10:
                 $_POST['usr_mod'] = $this->session->UserMedios;
 
                 $field_id = 'artp_id';
+                $table = 'art_publi';
                 break;
 
             default:
@@ -582,8 +592,59 @@ class C_Ppto extends Controller {
         $result = $this->M_Manager->UpdateInfo($field_id, $ppto, $table, $_POST);
         echo json_encode(array('res' => $result));
     }
-
+    
     function InsertInfo() {
+
+        $tipo = $this->input->post('tipo');
+        $ord_observacion = '';
+        if ($tipo != 7) {
+            $ord_observacion = $this->input->post('ord_observacion');
+            unset($_POST['ord_observacion']);
+        }
+
+        unset($_POST['tipo']);
+
+        switch ($tipo) {
+            case 1:
+                $table = 'presup_avisos';
+                break;
+            case 2:
+                $table = 'presup_clasificados';
+                break;
+            case 3:
+                $table = 'presup_revis';
+                break;
+            case 4:
+                $table = 'presup_radio';
+                break;
+            case 5:
+                $table = 'presup_tv';
+                break;
+            case 6:
+                $table = 'presup_prode';
+                break;
+            case 7:
+                $table = 'presup_prodi';
+                break;
+            case 8:
+                $table = 'publicidad_exterior';
+                break;
+            case 9:
+                $table = 'impresos';
+                break;
+            case 10:
+                $table = 'art_publi';
+                break;
+
+            default:
+                break;
+        }
+
+        $result = $this->M_Manager->InsertInfo($table, $_POST, $ord_observacion);
+        echo json_encode($result);
+    }
+
+    function InsertInfoMore() {
 
         $tipo = $this->input->post('tipo');
         $table = $this->input->post('tabla');
@@ -605,7 +666,6 @@ class C_Ppto extends Controller {
 
         $tipo = $this->input->post('tipo');
         $valor = $this->input->post('valor');
-        $table = $this->input->post('tabla');
 
         unset($_POST['tipo']);
         unset($_POST['valor']);
@@ -614,6 +674,7 @@ class C_Ppto extends Controller {
         switch ($tipo) {
             case 1:
                 $table_det = 'det_avisos';
+                $table = 'presup_avisos';
                 $field_id = 'psav_id';
                 $field_valor = 'psav_valor';
                 $field_total = 'psav_total';
@@ -630,6 +691,7 @@ class C_Ppto extends Controller {
                 break;
             case 2:
                 $table_det = 'det_clasi';
+                $table = 'presup_clasificados';
                 $field_id = 'pscf_id';
                 $field_valor = 'pscf_valor';
                 $field_total = 'pscf_total';
@@ -646,6 +708,7 @@ class C_Ppto extends Controller {
                 break;
             case 3:
                 $table_det = 'det_revis';
+                $table = 'presup_revis';
                 $field_id = 'psrev_id';
                 $field_valor = 'psrev_valor';
                 $field_total = 'psrev_total';
@@ -662,6 +725,7 @@ class C_Ppto extends Controller {
                 break;
             case 4:
                 $table_det = 'det_radio';
+                $table = 'presup_radio';
                 $field_id = 'psrad_id';
                 $field_valor = 'psrad_valor';
                 $field_total = 'psrad_total';
@@ -678,6 +742,7 @@ class C_Ppto extends Controller {
                 break;
             case 5:
                 $table_det = 'det_tv';
+                $table = 'presup_tv';
                 $field_id = 'pstv_id';
                 $field_valor = 'pstv_valor';
                 $field_total = 'pstv_total';
@@ -694,6 +759,7 @@ class C_Ppto extends Controller {
                 break;
             case 6:
                 $table_det = 'det_prode';
+                $table = 'presup_prode';
                 $field_id = 'psex_id';
                 $field_valor = 'psex_valor';
                 $field_total = 'psex_total';
@@ -714,6 +780,7 @@ class C_Ppto extends Controller {
                 break;
             case 7:
                 $table_det = 'det_prodi';
+                $table = 'presup_prodi';
                 $field_id = 'psin_id';
                 $field_valor = 'psin_valor';
                 $field_total = 'psin_total';
@@ -730,6 +797,7 @@ class C_Ppto extends Controller {
                 break;
             case 8:
                 $table_det = 'det_pubext';
+                $table = 'publicidad_exterior';
                 $field_id = 'pubext_id';
                 $field_valor = 'pubext_valor';
                 $field_total = 'pubext_total';
@@ -746,6 +814,7 @@ class C_Ppto extends Controller {
                 break;
             case 9:
                 $table_det = 'det_impresos';
+                $table = 'impresos';
                 $field_id = 'imp_id';
                 $field_valor = 'imp_valor';
                 $field_total = 'imp_total';
@@ -762,6 +831,7 @@ class C_Ppto extends Controller {
                 break;
             case 10:
                 $table_det = 'det_artpub';
+                $table = 'art_publi';
                 $field_id = 'artp_id';
                 $field_valor = 'artp_valor';
                 $field_total = 'artp_total';
@@ -812,13 +882,14 @@ class C_Ppto extends Controller {
     function UpdateDetail() {
 
         $tipo = $this->input->post('tipo');
-        $table = $this->input->post('tabla');
+
         unset($_POST['tipo']);
         unset($_POST['tabla']);
 
         switch ($tipo) {
             case 1:
                 $table_det = 'det_avisos';
+                $table = 'presup_avisos';
                 $field_id = 'psav_id';
                 $field_id_detalle = 'detavi_id';
                 $field_valor = 'psav_valor';
@@ -838,6 +909,7 @@ class C_Ppto extends Controller {
                 break;
             case 2:
                 $table_det = 'det_clasi';
+                $table = 'presup_clasificados';
                 $field_id = 'pscf_id';
                 $field_id_detalle = 'dclasi_id';
                 $field_valor = 'pscf_valor';
@@ -856,6 +928,7 @@ class C_Ppto extends Controller {
                 break;
             case 3:
                 $table_det = 'det_revis';
+                $table = 'presup_revis';
                 $field_id = 'psrev_id';
                 $field_id_detalle = 'drevis_id';
                 $field_valor = 'psrev_valor';
@@ -874,6 +947,7 @@ class C_Ppto extends Controller {
                 break;
             case 4:
                 $table_det = 'det_radio';
+                $table = 'presup_radio';
                 $field_id = 'psrad_id';
                 $field_id_detalle = 'drad_id';
                 $field_valor = 'psrad_valor';
@@ -893,6 +967,7 @@ class C_Ppto extends Controller {
                 break;
             case 5:
                 $table_det = 'det_tv';
+                $table = 'presup_tv';
                 $field_id = 'pstv_id';
                 $field_id_detalle = 'dtv_id';
                 $field_valor = 'pstv_valor';
@@ -913,6 +988,7 @@ class C_Ppto extends Controller {
                 break;
             case 6:
                 $table_det = 'det_prode';
+                $table = 'presup_prode';
                 $field_id = 'psex_id';
                 $field_id_detalle = 'dprode_id';
                 $field_valor = 'psex_valor';
@@ -932,6 +1008,7 @@ class C_Ppto extends Controller {
                 break;
             case 7:
                 $table_det = 'det_prodi';
+                $table = 'presup_prodi';
                 $field_id = 'psin_id';
                 $field_id_detalle = 'dpsin_id';
                 $field_valor = 'psin_valor';
@@ -947,6 +1024,7 @@ class C_Ppto extends Controller {
                 break;
             case 8:
                 $table_det = 'det_pubext';
+                $table = 'publicidad_exterior';
                 $field_id = 'pubext_id';
                 $field_id_detalle = 'dpubext_id';
                 $field_valor = 'pubext_valor';
@@ -966,6 +1044,7 @@ class C_Ppto extends Controller {
                 break;
             case 9:
                 $table_det = 'det_impresos';
+                $table = 'impresos';
                 $field_id = 'imp_id';
                 $field_id_detalle = 'dimp_id';
                 $field_valor = 'imp_valor';
@@ -985,6 +1064,7 @@ class C_Ppto extends Controller {
                 break;
             case 10:
                 $table_det = 'det_artpub';
+                $table = 'art_publi';
                 $field_id = 'artp_id';
                 $field_id_detalle = 'dartp_id';
                 $field_valor = 'artp_valor';
@@ -1039,11 +1119,11 @@ class C_Ppto extends Controller {
 
         $tipo = $this->input->post('tipo');
         $ppto = $ppto = $this->input->post('ppto');
-        $table = $this->input->post('tabla');
 
         switch ($tipo) {
             case 1:
                 $table_det = 'det_avisos';
+                $table = 'presup_avisos';
                 $field_id = 'psav_id';
                 $field_id_detalle = 'detavi_id';
                 $field_valor = 'psav_valor';
@@ -1062,6 +1142,7 @@ class C_Ppto extends Controller {
                 break;
             case 2:
                 $table_det = 'det_clasi';
+                $table = 'presup_clasificados';
                 $field_id = 'pscf_id';
                 $field_id_detalle = 'dclasi_id';
                 $field_valor = 'pscf_valor';
@@ -1079,6 +1160,7 @@ class C_Ppto extends Controller {
                 break;
             case 3:
                 $table_det = 'det_revis';
+                $table = 'presup_revis';
                 $field_id = 'psrev_id';
                 $field_id_detalle = 'drevis_id';
                 $field_valor = 'psrev_valor';
@@ -1095,6 +1177,7 @@ class C_Ppto extends Controller {
                 break;
             case 4:
                 $table_det = 'det_radio';
+                $table = 'presup_radio';
                 $field_id = 'psrad_id';
                 $field_id_detalle = 'drad_id';
                 $field_valor = 'psrad_valor';
@@ -1112,6 +1195,7 @@ class C_Ppto extends Controller {
                 break;
             case 5:
                 $table_det = 'det_tv';
+                $table = 'presup_tv';
                 $field_id = 'pstv_id';
                 $field_id_detalle = 'dtv_id';
                 $field_valor = 'pstv_valor';
@@ -1130,6 +1214,7 @@ class C_Ppto extends Controller {
                 break;
             case 6:
                 $table_det = 'det_prode';
+                $table = 'presup_prode';
                 $field_id = 'psex_id';
                 $field_id_detalle = 'dprode_id';
                 $field_valor = 'psex_valor';
@@ -1147,6 +1232,7 @@ class C_Ppto extends Controller {
                 break;
             case 7:
                 $table_det = 'det_prodi';
+                $table = 'presup_prodi';
                 $field_id = 'psin_id';
                 $field_id_detalle = 'dpsin_id';
                 $field_valor = 'psin_valor';
@@ -1160,6 +1246,7 @@ class C_Ppto extends Controller {
                 break;
             case 8:
                 $table_det = 'det_pubext';
+                $table = 'publicidad_exterior';
                 $field_id = 'pubext_id';
                 $field_id_detalle = 'dpubext_id';
                 $field_valor = 'pubext_valor';
@@ -1177,6 +1264,7 @@ class C_Ppto extends Controller {
                 break;
             case 9:
                 $table_det = 'det_impresos';
+                $table = 'impresos';
                 $field_id = 'imp_id';
                 $field_id_detalle = 'dimp_id';
                 $field_valor = 'imp_valor';
@@ -1194,6 +1282,7 @@ class C_Ppto extends Controller {
                 break;
             case 10:
                 $table_det = 'det_artpub';
+                $table = 'art_publi';
                 $field_id = 'artp_id';
                 $field_id_detalle = 'dartp_id';
                 $field_valor = 'artp_valor';
@@ -1228,7 +1317,6 @@ class C_Ppto extends Controller {
             echo json_encode(array('res' => $result['res']));
         }
     }
-
     function GetRowDetailppto() {
         $result = $this->M_Manager->GetRowDetailppto();
         echo json_encode($result);

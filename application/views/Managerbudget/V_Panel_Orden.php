@@ -115,7 +115,9 @@
             if (result) {
                 $.post('<?= base_url() ?>Managerbudget/C_Preorden/Convertir',{orden:preorden,tipo:<?= $table ?>,tabla:tabla},function(data){
                     if(data.res == 'OK'){
-                        
+                        swal('Operacion Exitosa!', 'El presupuesto ha sido creado.', 'success').then((result) => {
+                            sendLocation(data.ppto,<?= $table ?>);
+                        })
                     }else{
                         swal({title: 'Error!', text: data.res, type: 'error'});
                     }
@@ -126,6 +128,40 @@
         }).catch(swal.noop)
     }
     
+    function sendLocation(id,tipo){
+        switch(tipo){
+            case 1:
+                window.location.replace("<?= base_url() ?>Prensa/Edit/" + id + "/<?= $table ?>");
+                break;
+            case 2:
+                window.location.replace("<?= base_url() ?>Clasificado/Edit/" + id + "/<?= $table ?>");
+                break;
+            case 3:
+                window.location.replace("<?= base_url() ?>Revista/Edit/" + id + "/<?= $table ?>");
+                break;
+            case 4:
+                window.location.replace("<?= base_url() ?>Radio/Edit/" + id + "/<?= $table ?>");
+                break;
+            case 5:
+                window.location.replace("<?= base_url() ?>Tv/Edit/" + id + "/<?= $table ?>");
+                break;
+            case 6:
+                window.location.replace("<?= base_url() ?>Externa/Edit/" + id + "/<?= $table ?>");
+                break;
+            case 7:
+                window.location.replace("<?= base_url() ?>Interna/Edit/" + id + "/<?= $table ?>");
+                break;
+            case 8:
+                window.location.replace("<?= base_url() ?>Exterior/Edit/" + id + "/<?= $table ?>");
+                break;
+            case 9:
+                window.location.replace("<?= base_url() ?>Impreso/Edit/" + id + "/<?= $table ?>");
+                break;
+            case 10:
+                window.location.replace("<?= base_url() ?>Articulo/Edit/" + id + "/<?= $table ?>");
+                break;
+        }
+    }
     function EditPpto(id,tipo){
         switch(tipo){
             case 1:

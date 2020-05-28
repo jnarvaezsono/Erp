@@ -160,22 +160,24 @@ class VS_Model extends CI_Model {
         }
     }
 
-    function ListarClientesNew($id_cliente = false, $lock = false) {
+    function ListarClientesNew($id_cliente = false, $lock = false, $all = false) {
 
         if ($lock) {
             $this->db->where('id_status', 1);
         }
-
-        if ($id_cliente) {
-            $this->db->where('id_client', $id_cliente);
-        } else {
-            if (TeamOlimipica($this->session->IdRol)) {
-                $this->db->where('id_client = 1339 ');
-            } else if (TeamOther($this->session->IdRol)) {
-                $this->db->where('id_client != 1339 ');
-            }
-        }
-
+		
+		if(!$all){
+			if ($id_cliente) {
+				$this->db->where('id_client', $id_cliente);
+			} else {
+				if (TeamOlimipica($this->session->IdRol)) {
+					$this->db->where('id_client = 1339 ');
+				} else if (TeamOther($this->session->IdRol)) {
+					$this->db->where('id_client != 1339 ');
+				}
+			}
+		}
+		
         $result = $this->db->select('*')
                 ->from('sys_clients')
                 ->where('cliente', 1)

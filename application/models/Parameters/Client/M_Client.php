@@ -194,6 +194,25 @@ class M_Client extends VS_Model {
 
         return array("result" => $result->result(), "num" => $result->num_rows());
     }
-
+    
+    function ShowCampana(){
+        $result = $this->db->select('*')
+                ->from("cat_campanas c")
+                ->where('pvcl_id',$this->cliente)
+                ->order_by("camp_nombre")
+                ->get();
+        
+        return $result->result();
+    }
+    
+    function ShowProducto(){
+        $result = $this->db->select('*')
+                ->from("cat_prodsclies c")
+                ->where('pvcl_id',$this->cliente)
+                ->order_by("pdcl_nombre")
+                ->get();
+        
+        return $result->result();
+    }
 
 }

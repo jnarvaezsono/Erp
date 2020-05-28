@@ -895,6 +895,83 @@ class C_Preorden extends Controller {
         echo json_encode(array('res' => $result));
     }
     
+    function UpdateInfo() {
+
+        $ppto = $this->input->post('ppto');
+        $total = $this->input->post('total');
+        $tipo = $this->input->post('tipo');
+        $table = $this->input->post('tabla');
+        if ($tipo != 7) {
+            $this->M_Preorden->UpdateOrder($this->input->post('ord_id'), array('pvcl_id_prov' => $this->input->post('pvcl_id_prov'),'ord_observacion' => $this->input->post('ord_observacion')));
+            unset($_POST['ord_observacion']);
+            unset($_POST['ord_id']);
+        }
+
+        unset($_POST['tipo']);
+        unset($_POST['ppto']);
+        unset($_POST['total']);
+        unset($_POST['tabla']);
+
+        switch ($tipo) {
+            case 1:
+                $_POST['usr_id_mod'] = $this->session->UserMedios;
+
+                $field_id = 'psav_id';
+                break;
+            case 2:
+                $_POST['usr_id_mod'] = $this->session->UserMedios;
+
+                $field_id = 'pscf_id';
+                break;
+            case 3:
+                $_POST['usr_id_mod'] = $this->session->UserMedios;
+
+                $field_id = 'psrev_id';
+                break;
+            case 4:
+                $_POST['usr_mod'] = $this->session->UserMedios;
+
+                $field_id = 'psrad_id';
+                break;
+            case 5:
+                $_POST['usr_id_mod'] = $this->session->UserMedios;
+
+                $field_id = 'pstv_id';
+                break;
+            case 6:
+                $_POST['usr_id_mod'] = $this->session->UserMedios;
+
+                $field_id = 'psex_id';
+                break;
+            case 7:
+                $_POST['usr_id_mod'] = $this->session->UserMedios;
+
+                $field_id = 'psin_id';
+                break;
+            case 8:
+                $_POST['usr_mod'] = $this->session->UserMedios;
+
+                $field_id = 'pubext_id';
+                break;
+            case 9:
+                $_POST['usr_mod'] = $this->session->UserMedios;
+
+                $field_id = 'imp_id';
+                break;
+            case 10:
+                $_POST['usr_mod'] = $this->session->UserMedios;
+
+                $field_id = 'artp_id';
+                break;
+
+            default:
+                break;
+        }
+
+        $result = $this->M_Preorden->UpdateInfo($field_id, $ppto, $table, $_POST);
+        echo json_encode(array('res' => $result));
+    }
+    
     function PrintPpto($ppto, $tipo, $ord = 0, $print = 1) {
 
         $result = $this->M_Preorden->GetPptoCompleteInfoOrden(false, false, $tipo, $ppto, 'all', 'all', 'all');
@@ -945,54 +1022,76 @@ class C_Preorden extends Controller {
     
     function Convertir(){
         
-        $pre_orden = $this->M_Preorden->GetPpto($this->orden, $this->tipo, $this->tabla);
+        $data = $this->M_Preorden->GetPpto($this->orden, $this->tipo, $this->tabla);
         
         switch ($this->tipo) {
             case 1:
                 $cab = 'presup_avisos';
                 $tpo = "aviso";
+                $table_Det = "det_avisos";
+                $field_id = 'psav_id';
                 break;
             case 2:
                 $cab = 'presup_clasificados';
                 $tpo = "clasificado";
+                $table_Det = "det_clasi";
+                $field_id = 'pscf_id';
                 break;
             case 3:
                 $cab = 'presup_revis';
                 $tpo = "revista";
+                $table_Det = "det_revis";
+                $field_id = 'psrev_id';
                 break;
             case 4:
                 $cab = 'presup_radio';
                 $tpo = "radio";
+                $table_Det = "det_radio";
+                $field_id = 'psrad_id';
                 break;
             case 5:
                 $cab = 'presup_tv';
                 $tpo = "television";
+                $table_Det = "det_tv";
+                $field_id = 'pstv_id';
                 break;
             case 6:
                 $cab = 'presup_prode';
                 $tpo = "externa";
+                $table_Det = "det_prode";
+                $field_id = 'psex_id';
                 break;
             case 7:
                 $cab = 'presup_prodi';
                 $tpo = "interna";
+                $table_Det = "det_prodi";
+                $field_id = 'psin_id';
                 break;
             case 8:
                 $cab = 'publicidad_exterior';
                 $tpo = "publicidad_exterior";
+                $table_Det = "det_pubext";
+                $field_id = 'pubext_id';
                 break;
             case 9:
                 $cab = 'impresos';
                 $tpo = "impresos";
+                $table_Det = "det_impresos";
+                $field_id = 'imp_id';
                 break;
             case 10:
                 $cab = 'art_publi';
                 $tpo = "articulos_publicitarios";
+                $table_Det = "det_artpub";
+                $field_id = 'artp_id';
                 break;
         }
         
-        $id_ppto = $this->M_Preorden->InsertInfo($cab, $pre_orden);
+        $id_ppto = $this->M_Preorden->InsertInfo($cab, $data);
+        $this->M_Preorden->InsertDetail($table_Det,$field_id,$id_ppto,$this->orden);
         $this->M_Preorden->UpdateOrdProveedor($id_ppto,$this->orden,$tpo);
-        
+        $this->M_Preorden->UpdateStatusOrden($this->tipo,$this->orden, 39); 
+        echo json_encode(array('ppto'=>$id_ppto,'res'=>'OK'));
     }
 
 }

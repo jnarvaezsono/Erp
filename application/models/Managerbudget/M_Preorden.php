@@ -470,7 +470,7 @@ class M_Preorden extends VS_Model {
                     $data['num_impresiones'] = $rs->num_impresiones + 1;
                 }
 
-                if (!in_array($rs->psav_estado, array(4, 38, 9999, 47)) || $status == 38) {
+                if (!in_array($rs->psav_estado, array(4, 38, 9999, 47, 39)) || $status == 38) {
                     $data['psav_estado'] = $status;
                 }
 
@@ -489,7 +489,7 @@ class M_Preorden extends VS_Model {
                     $data['num_impresiones'] = $rs->num_impresiones + 1;
                 }
 
-                if (!in_array($rs->pscf_estado, array(4, 38, 9999, 47)) || $status == 38) {
+                if (!in_array($rs->pscf_estado, array(4, 38, 9999, 47, 39)) || $status == 38) {
                     $data['pscf_estado'] = $status;
                 }
 
@@ -508,7 +508,7 @@ class M_Preorden extends VS_Model {
                     $data['num_impresiones'] = $rs->num_impresiones + 1;
                 }
 
-                if (!in_array($rs->psrev_estado, array(4, 38, 9999, 47)) || $status == 38) {
+                if (!in_array($rs->psrev_estado, array(4, 38, 9999, 47, 39)) || $status == 38) {
                     $data['psrev_estado'] = $status;
                 }
 
@@ -527,7 +527,7 @@ class M_Preorden extends VS_Model {
                     $data['num_impresiones'] = $rs->num_impresiones + 1;
                 }
 
-                if (!in_array($rs->psrad_estado, array(4, 38, 9999, 47)) || $status == 38) {
+                if (!in_array($rs->psrad_estado, array(4, 38, 9999, 47, 39)) || $status == 38) {
                     $data['psrad_estado'] = $status;
                 }
 
@@ -546,7 +546,7 @@ class M_Preorden extends VS_Model {
                     $data['num_impresiones'] = $rs->num_impresiones + 1;
                 }
 
-                if (!in_array($rs->pstv_estado, array(4, 38, 9999, 47)) || $status == 38) {
+                if (!in_array($rs->pstv_estado, array(4, 38, 9999, 47, 39)) || $status == 38) {
                     $data['pstv_estado'] = $status;
                 }
 
@@ -597,7 +597,7 @@ class M_Preorden extends VS_Model {
                     $data['num_impresiones'] = $rs->num_impresiones + 1;
                 }
 
-                if (!in_array($rs->est_id, array(4, 38, 9999, 47)) || $status == 38) {
+                if (!in_array($rs->est_id, array(4, 38, 9999, 47, 39)) || $status == 38) {
                     $data['est_id'] = $status;
                 }
 
@@ -617,7 +617,7 @@ class M_Preorden extends VS_Model {
                     $data['num_impresiones'] = $rs->num_impresiones + 1;
                 }
 
-                if (!in_array($rs->est_id, array(4, 38, 9999, 47)) || $status == 38) {
+                if (!in_array($rs->est_id, array(4, 38, 9999, 47, 39)) || $status == 38) {
                     $data['est_id'] = $status;
                 }
 
@@ -637,7 +637,7 @@ class M_Preorden extends VS_Model {
                     $data['num_impresiones'] = $rs->num_impresiones + 1;
                 }
 
-                if (!in_array($rs->est_id, array(4, 38, 9999, 47)) || $status == 38) {
+                if (!in_array($rs->est_id, array(4, 38, 9999, 47, 39)) || $status == 38) {
                     $data['est_id'] = $status;
                 }
 
@@ -812,6 +812,16 @@ class M_Preorden extends VS_Model {
         $id = $this->db->insert_id();
             
         return $id;
+    }
+    
+    function UpdateOrder($ord_id, $data) {
+        $this->db->where('ord_id', $ord_id);
+        $this->db->update('ordenes', $data);
+    }
+    
+    function InsertDetail($table_Det,$field_id,$id_ppto,$pre_orden){
+        $this->db->where('id_preorden',$pre_orden);
+        $this->db->update($table_Det,array('pscf_id'=>$id_ppto));
     }
     
     function UpdateOrdProveedor($id_ppto,$preorden,$tipo){

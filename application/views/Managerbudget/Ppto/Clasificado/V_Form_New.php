@@ -616,7 +616,7 @@ $lista = (!$pre_order)?'Clasificado':'PreClasificado'
             formData.append("usr_id_mod", '<?=$this->session->UserMedios?>');
             formData.append("pscf_fecha", '<?=date("Y-m-d")?>');
             $.ajax({
-                url: "<?= base_url() ?>Managerbudget/C_Ppto/InsertInfo",
+                url: "<?= base_url() ?>Managerbudget/C_Ppto/InsertInfoMore",
                 type: 'POST',
                 data: formData,
                 success: function (data) {
@@ -626,7 +626,14 @@ $lista = (!$pre_order)?'Clasificado':'PreClasificado'
                         $('#save').hide();
                         $('#add-detail ,#add-oc').show();
                         $('#btn-create').attr('onclick','AddDetail('+obj.id+')');
-                        $('#titulo').html('<i class="fa fa-edit"></i> Clasificado N°<small>'+obj.id+' Activo - Orden N° '+obj.ord_id+'</small>');
+                        
+                        <?php if($lista == 'Clasificado'): ?>
+                            var name = "Presupuesto De Clasificado";
+                        <?php else: ?>
+                            var name = "Pre Orden De Clasificado";
+                        <?php endif; ?>
+                        
+                        $('#titulo').html('<i class="fa fa-edit"></i> '+name+' N°<small>'+obj.id+' Activo - Orden N° '+obj.ord_id+'</small>');
                         swal({title: 'OK!', text: '', type: 'success'});
                     } else {
                         swal({title: 'Error!', text: obj.msg, type: 'error'});
@@ -666,7 +673,7 @@ $lista = (!$pre_order)?'Clasificado':'PreClasificado'
             formData.append("pscf_ivaspa", pscf_ivaspa);
             formData.append("total", pscf_total);
             $.ajax({
-                url: "<?= base_url() ?>Managerbudget/C_Ppto/UpdateInfo",
+                url: "<?= base_url() ?>Managerbudget/C_Preorden/UpdateInfo",
                 type: 'POST',
                 data: formData,
                 success: function (data) {

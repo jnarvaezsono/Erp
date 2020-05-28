@@ -36,7 +36,7 @@ class C_Time extends Controller {
         
         $data['times'] = $this->M_Time->LoadTimesCab($this->session->IdUser,40);
         $data['task'] = $this->M_Time->LoadMyTask($this->session->IdUser);
-        $data['clients'] = $this->M_Time->ListarClientesNew(false,true);
+        $data['clients'] = $this->M_Time->ListarClientesNew(false,true,true);
         $this->load->view('Time/V_Panel',$data);
 
         $Footer['sidebar_tabs'] = $this->load->view('Template/V_sidebar_tabs', null, true);

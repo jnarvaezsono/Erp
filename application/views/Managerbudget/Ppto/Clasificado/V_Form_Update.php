@@ -711,7 +711,7 @@ $lista = (!$pre_order)?'Clasificado':'PreClasificado'
             formData.append("pscf_ivaspa", pscf_ivaspa);
             formData.append("total", pscf_total);
             $.ajax({
-                url: "<?= base_url() ?>Managerbudget/C_Ppto/UpdateInfo",
+                url: "<?= base_url() ?>Managerbudget/C_Preorden/UpdateInfo",
                 type: 'POST',
                 data: formData,
                 success: function (data) {
