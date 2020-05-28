@@ -7,7 +7,18 @@
             </div>
             <div class="box-body">
                 <div class="col-md-12" id="content-table">
-                    <?= $table ?>
+                    <table id="tabla_clientes" class="table table-bordered table-striped table-condensed ">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Documento</th>
+                                <th>Ciudad</th>
+                                <th>Dirección</th>
+                                <th>Telefono</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
             <div class="box-footer">
@@ -34,7 +45,7 @@
             $(".select2").select2();
         });
         
-        CreateDataTable("tabla_roles", false, false, true, true, true);
+        Cargar_Tabla();
         $(".dt-buttons").append('<label style="margin-left: 5px;"><a onclick="Create()" class="btn btn-default btn-sm buttons-excel buttons-html5" tabindex="0" aria-controls="tabla_user" href="#"><span><i class="fa fa-user-plus"></i> Crear</span></a></label>');
     });
 
@@ -105,10 +116,9 @@
                             text: "Registro Actualizado.",
                             type: 'success'
                         }).then((result) => {
-                            $("#content-table").html(obj.tabla);
-                            var table = CreateDataTable("tabla_roles", false, false, true, true, true);
-                            $(".dt-buttons").append('<label style="margin-left: 5px;"><a onclick="Create()" class="btn btn-default btn-sm buttons-excel buttons-html5" tabindex="0" aria-controls="tabla_user" href="#"><span><i class="fa fa-user-plus"></i> Crear</span></a></label>');
                             $("#menu_form").modal("hide");
+                            Cargar_Tabla();
+                            $(".dt-buttons").append('<label style="margin-left: 5px;"><a onclick="Create()" class="btn btn-default btn-sm buttons-excel buttons-html5" tabindex="0" aria-controls="tabla_user" href="#"><span><i class="fa fa-user-plus"></i> Crear</span></a></label>');
                         });
                     } else {
                         swal({title: 'Error!', text: obj.res, type: 'error'});
@@ -120,8 +130,6 @@
             });
         }
     }
-
-
 
     function CreateClient() {
         var error = false;
@@ -167,10 +175,11 @@
                             text: "El registro ha sido creado.",
                             type: 'success'
                         }).then((result) => {
-                            $("#content-table").html(obj.tabla);
-                            var table = CreateDataTable("tabla_roles", false, false, true, true, true);
-                            $(".dt-buttons").append('<label style="margin-left: 5px;"><a onclick="Create()" class="btn btn-default btn-sm buttons-excel buttons-html5" tabindex="0" aria-controls="tabla_user" href="#"><span><i class="fa fa-user-plus"></i> Crear</span></a></label>');
+                            
                             $("#menu_form").modal("hide");
+                            Cargar_Tabla();
+                            $(".dt-buttons").append('<label style="margin-left: 5px;"><a onclick="Create()" class="btn btn-default btn-sm buttons-excel buttons-html5" tabindex="0" aria-controls="tabla_user" href="#"><span><i class="fa fa-user-plus"></i> Crear</span></a></label>');
+
                         });
                     } else {
                         swal({title: 'Error!', text: obj.res, type: 'error'});
@@ -197,9 +206,9 @@
                 $.post("<?= base_url() ?>Parameters/Client/C_Client/DeleteClient", {id_client: id_client}, function (data) {
                     if (data.res == "OK") {
                         swal('Operacion Exitosa!', 'El registro ha sido eliminado.', 'success').then((result) => {
-                            $("#content-table").html(data.tabla);
-                            var table = CreateDataTable("tabla_roles", false, false, true, true, true);
+                           Cargar_Tabla();
                             $(".dt-buttons").append('<label style="margin-left: 5px;"><a onclick="Create()" class="btn btn-default btn-sm buttons-excel buttons-html5" tabindex="0" aria-controls="tabla_user" href="#"><span><i class="fa fa-user-plus"></i> Crear</span></a></label>');
+
                         });
                     } else {
                         swal({title: 'Error!', text: data, type: 'error'});
@@ -214,6 +223,56 @@
 
             }
         }).catch(swal.noop)
+    }
+    
+    function Cargar_Tabla() {
+        if ($.fn.DataTable.isDataTable('#tabla_clientes')) {
+            $('#tabla_clientes').DataTable().destroy();
+        }
+    
+        var type = '<?= $type ?>';
+        var oTable = $('#tabla_clientes').dataTable({
+            "searching": true,
+            dom: 'Bfrtip',
+            "processing": true,
+            "serverSide": true,
+            lengthChange:false,
+            'autoWidth': false,
+            fixedHeader: true,
+            "pageLength": 10,
+            sScrollX: true,
+            scrollCollapse: true,
+            "scrollY": "400px",
+            "ordering": false,
+            "buttons": [],
+            "ajax": {
+                "url": "<?= base_url() ?>Parameters/Client/C_Client/GetListTable/" + type,
+                "dataSrc": "datos"
+            },
+            "language": {
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                }
+            }
+//            , columnDefs: [
+//                {className: "text-center ", targets: [0], width: '50px'},
+//                {className: "text-center ", targets: [1], width: '60px'},
+//                {className: "text-center", targets: [7]},
+//                {className: "text-center td-estado", targets: [6],width: '95px'}
+//            ],
+        });
+    
+
     }
 
 </script>

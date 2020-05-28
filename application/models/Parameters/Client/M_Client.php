@@ -166,5 +166,34 @@ class M_Client extends VS_Model {
         
         return ($res)?"OK":"ERROR : ".$this->db->last_query();
     }
+    
+    function GetPptoCompleteInfo($ini = false, $fin = false, $tipo) {
+
+        if ($fin)
+            $this->db->limit($fin, $ini);
+
+        if (!empty($this->input->get('search[value]'))) {
+            $this->db->like('id_client', $this->input->get('search[value]'));
+            $this->db->or_like('c.nombre', trim($this->input->get('search[value]')));
+            $this->db->or_like('s.description', trim($this->input->get('search[value]')));
+        }
+
+        if ($tipo == 'Cliente'){
+            $this->db->where('c.cliente', 1);
+        }else{
+            $this->db->where('c.proveedor', 1);
+        }
+
+        $result = $this->db->select('*')
+                ->from("sys_clients c")
+                ->join("sys_status s", "c.id_status = s.id_status")
+                ->order_by("c.nombre")
+                ->get();
+                
+
+
+        return array("result" => $result->result(), "num" => $result->num_rows());
+    }
+
 
 }
