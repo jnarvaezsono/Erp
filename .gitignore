@@ -3,7 +3,7 @@
 application/cache/*
 application/config/database.php
 !application/cache/index.html
-
+Adjuntos
 application/logs/*
 !application/logs/index.html
 
