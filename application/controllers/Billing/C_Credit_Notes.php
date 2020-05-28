@@ -143,10 +143,11 @@ class C_Credit_Notes extends Controller {
         $iva_spa_cal = 0;
         $base_iva = 0;
         $base_iva_spa = 0;
+        $bruto_total_spa = 0;
         foreach ($rows as $p) {
             $iva_cal += $p->iva;
             $iva_spa_cal += $p->iva_spa;
-            
+            $bruto_total_spa += ($p->spa - $p->descuento);
             $base_iva += ($p->iva > 0)?($p->valor_bruto - $p->descuento) : 0;
             $base_iva_spa += ($p->iva_spa > 0)?($p->spa - $p->descuento) : 0;
         }
@@ -421,7 +422,7 @@ class C_Credit_Notes extends Controller {
         $imp = xml_add_child($tim, 'IMP');
         $array_imp = array(
             '1' => '01',
-            '2' => '' . $base_iva_spa,
+            '2' => ($totals->iva_spa == 0)?'' .$bruto_total_spa:'' .$base_iva_spa,
             '3' => $data->divisa,
             '4' => ($totals->iva_spa > 0)?$totals->iva_spa:'0',
             '5' => $data->divisa,

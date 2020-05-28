@@ -63,6 +63,10 @@ class C_Client extends Controller {
             $btn .= '<ul class="dropdown-menu u-' . $v->id_client . '" role="menu">';
             $btn .= '<li onclick="Update(' . $v->id_client . ')"><a href="#"><i class="fa fa-fw fa-edit" ></i> Editar</a></li>';
             $btn .= '<li onclick="Delete(' . $v->id_client . ',\''.$v->nombre.'\')"><a href="#"><i class="fa fa-fw fa-trash" ></i> Eliminar</a></li>';
+            if($tipo == 'Cliente'):
+                $btn .= '<li onclick="addmore(1,' . $v->id_client . ')"><a href="#"><i class="fa fa-fw fa-plus" ></i> Add Camapaña</a></li>';
+                $btn .= '<li onclick="addmore(2,' . $v->id_client . ')"><a href="#"><i class="fa fa-fw fa-plus" ></i> Add Producto</a></li>';
+            endif;
             $btn .= '</ul></div>';
 
 
@@ -124,6 +128,18 @@ class C_Client extends Controller {
         $result = $this->M_Client->DeleteClient();
         
         echo json_encode(array("res"=>$result));
+    }
+    
+    function ShowCampana(){
+        $data['result'] = $this->M_Client->ShowCampana();
+        $table = $this->load->view('Parameters/Client/V_Modal_More',$data,true);
+        echo json_encode(array("res"=>$table));
+    }
+    
+    function ShowProducto(){
+        $data['result'] = $this->M_Client->ShowProducto();
+        $table = $this->load->view('Parameters/Client/V_Modal_More',$data,true);
+        echo json_encode(array("res"=>$table));
     }
 
 }

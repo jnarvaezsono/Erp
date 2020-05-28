@@ -35,10 +35,16 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+
+<div id="more_form"  class="modal fade" tabindex="-1" role="dialog"   >
+    <div class="modal-dialog " >
+        <div class="modal-content box" id="body-more">
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
 <script>
-
-    var column = [{"sWidth": "60%"}, {"sWidth": "25%"}, {"sWidth": "15%"}];
-
     $(document).ready(function () {
         
         $('#menu_form').on('shown.bs.modal', function (e) {
@@ -223,6 +229,22 @@
 
             }
         }).catch(swal.noop)
+    }
+    
+    function addmore(tipo,cliente){
+    
+        if(tipo == 1){
+            var controller = 'ShowCampana';
+            var title = 'Campaña';
+        }else{
+            var controller = 'ShowProducto';
+            var title = 'Producto';
+        }
+    
+        $.post("<?= base_url() ?>Parameters/Client/C_Client/"+controller, {cliente:cliente,title:title}, function (data) {
+            $('#body-more').html(data.res);
+            $("#more_form").modal("show");
+        }, 'json');
     }
     
     function Cargar_Tabla() {

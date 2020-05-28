@@ -1154,6 +1154,7 @@ class C_Bill extends Controller {
         $iva_spa_cal = 0;
         $base_iva = 0;
         $base_iva_spa = 0;
+        $bruto_total_spa = 0;
         foreach ($detail['result'] as $p) {
             if ($p->tpo_presup != 'interna') {
                 $tipo_operacion = '11';
@@ -1171,7 +1172,7 @@ class C_Bill extends Controller {
             
             $iva_cal += $p->vlr_iva;
             $iva_spa_cal += $p->vlr_ivaspa;
-            
+            $bruto_total_spa += ($p->vlr_spa - $p->vlr_desc_interna);
             $base_iva += ($p->vlr_iva > 0)?($p->vlr_bruto - $p->vlr_desc) : 0;
             $base_iva_spa += ($p->vlr_ivaspa > 0)?($p->vlr_spa - $p->vlr_desc_interna) : 0;
         }
@@ -1434,7 +1435,8 @@ class C_Bill extends Controller {
         $imp = xml_add_child($tim, 'IMP');
         $array_imp = array(
             '1' => '01',
-            '2' => '' . $base_iva_spa,
+//            '2' => '' . $base_iva_spa,
+            '2' => ($valr->vlr_ivaspa == 0)?'' .$bruto_total_spa:'' .$base_iva_spa,
             '3' => $data->divisa,
             '4' => ($valr->vlr_ivaspa > 0) ? $valr->vlr_ivaspa : '0',
             '5' => $data->divisa,
