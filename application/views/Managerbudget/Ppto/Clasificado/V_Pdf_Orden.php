@@ -29,7 +29,7 @@ foreach ($result as $v) : ?>
         </style>
         <header class="clearfix">
             <p style="text-align:right;"><b><?=($v->impresiones >= 0 )?'DUPLICADO':'ORIGINAL'?></b></p>
-            <button type="button" class="btn btn-block btn-primary btn-sm" >Imprimir</button>
+            <button type="button" class="btn btn-block btn-primary btn-sm" onclick="imprimir()">Imprimir</button>
             
             <div id="logo">
                 <img src="<?=base_url()?>dist/img/header-ordenes-sonovista1.jpg">
@@ -172,6 +172,13 @@ foreach ($result as $v) : ?>
         });
     });
       
+    function imprimir(){
+        window.print();
+    }
+    
+    function imprimirPrevia(){
+        window.print();
+    }
 </script>
 </html>
 <?php endforeach; ?>
