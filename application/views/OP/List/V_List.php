@@ -115,7 +115,7 @@
                                     <th >Creador</th>
                                     <th >Creación</th>
                                     <th >Entrega</th>
-                                    <th >Cierre</th>
+                                    <th >Modalidad</th>
                                     <th style="text-align:center;">Descripción</th>
                                     <th style="text-align:center;">Responsable</th>
                                     <th style="text-align:center;">Ppto</th>

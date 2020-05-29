@@ -194,7 +194,7 @@ class M_OP extends VS_Model {
             }
         }
 
-        $result = $this->db->select('t.id_tarea,t.id_op,un.descripcion AS unidad,c.descripcion AS categoria,DATE_FORMAT(t.fecha_creacion, "%Y%-%m%-%d") as fecha_creacion,t.fecha_entrega,t.fecha_cierre,t.descripcion,s.description AS estado,t.id_estado,s.color,t.tiempo_estimado,f_responsables(t.id_responsable) AS responsable, cl.nombre,t.presupuesto, u.name as creador,DATEDIFF(t.fecha_entrega,CURRENT_DATE()) as dias')
+        $result = $this->db->select('t.id_tarea,t.id_op,un.descripcion AS unidad,c.descripcion AS categoria,DATE_FORMAT(t.fecha_creacion, "%Y%-%m%-%d") as fecha_creacion,t.fecha_entrega,t.fecha_cierre,t.descripcion,s.description AS estado,t.id_estado,s.color,t.tiempo_estimado,f_responsables(t.id_responsable) AS responsable, cl.nombre,t.presupuesto, u.name as creador,DATEDIFF(t.fecha_entrega,CURRENT_DATE()) as dias,t.modalidad_cobro')
                 ->from('sys_tareas_op t')
                 ->join('sys_op o','t.id_op = o.id_op')
                 ->join('sys_categoria c', 't.id_categoria = c.id_categoria', 'left')
