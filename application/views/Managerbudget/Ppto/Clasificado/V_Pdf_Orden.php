@@ -29,7 +29,7 @@ foreach ($result as $v) : ?>
         </style>
         <header class="clearfix">
             <p style="text-align:right;"><b><?=($v->impresiones >= 0 )?'DUPLICADO':'ORIGINAL'?></b></p>
-            <button type="button" class="btn btn-block btn-primary btn-sm" onclick="imprimir()">Imprimir</button>
+            <button type="button" class="btn btn-block btn-primary btn-sm" >Imprimir</button>
             
             <div id="logo">
                 <img src="<?=base_url()?>dist/img/header-ordenes-sonovista1.jpg">
@@ -172,17 +172,6 @@ foreach ($result as $v) : ?>
         });
     });
       
-    function imprimir(){
-        if(confirm('Confirma imprimir el formato?')){
-            $.post('<?= base_url() ?>Managerbudget/C_Preorden/UpdatePrint',{tipo:<?=$tipo?>,ppto:<?=$v->id?>,status:5},function(){
-                window.print();
-            });
-        }
-    }
-    
-    function imprimirPrevia(){
-        window.print();
-    }
 </script>
 </html>
 <?php endforeach; ?>

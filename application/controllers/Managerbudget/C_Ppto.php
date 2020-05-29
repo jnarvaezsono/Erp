@@ -146,7 +146,6 @@ class C_Ppto extends Controller {
                 $folder = 'Externa';
                 $data['proveedores'] = $this->M_Manager->ListarProveedoresNew();
                 $data['orden'] = $this->M_Manager->GetOrdenPpto($id, 'externa',$pre_order);
-                $data['ordenes'] = $this->M_Manager->ListOrdCostoExt($tipo, $data['row']->servicio);
                 $data['title'] = ($pre_order)?'Pre Orden De Externa N&deg;':'Presupuesto De Externa N&deg;';
                 $data['tabla'] = ($pre_order)?'pre_orden_externa':'presup_prode';
                 break;
@@ -187,6 +186,9 @@ class C_Ppto extends Controller {
         
         $data['row'] = $this->M_Manager->GetPpto($id, $tipo, $data['tabla']);
         $data['clientes'] = $this->M_Manager->ListarClientesNew();
+        
+        if($tipo == 6)
+            $data['ordenes'] = $this->M_Manager->ListOrdCostoExt($tipo, $data['row']->servicio);
 
         $data['campanas'] = $this->M_Manager->ListarCampana($data['row']->cliente);
         $data['rubros'] = $this->M_Manager->ListarRubro($data['row']->cliente);
