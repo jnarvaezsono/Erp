@@ -165,10 +165,10 @@ class M_Main extends VS_Model {
                     return "CHANGE";
                 } else {
                     
-//                    $rsTime = $this->db->query("SELECT * FROM sys_timesheet t 
-//                                    WHERE t.id_users = ".$reg->id_users." 
-//                                    AND t.id_estado = 10 AND t.num not in (6,7) AND t.festivo != 1 
-//                                    AND t.fecha <=  DATE_SUB(CURDATE(),INTERVAL 2 DAY)")->num_rows();
+                    $rsTime = $this->db->query("SELECT * FROM sys_timesheet t 
+                                    WHERE t.id_users = ".$reg->id_users." 
+                                    AND t.id_estado = 10 AND t.num not in (6,7) AND t.festivo != 1 
+                                    AND t.fecha <=  DATE_SUB(CURDATE(),INTERVAL 2 DAY)")->num_rows();
                     
                     $this->db->where("id_users", $reg->id_users);
                     $this->db->update("sys_users", array("last_entry" => date("Y-m-d H:i:s")));
@@ -184,8 +184,7 @@ class M_Main extends VS_Model {
                         'Skin' => $reg->skin,
                         'Layout' => $reg->layout,
                         'Sidebar' => $reg->sidebar,
-//                        'count_time' => $rsTime,
-                        'count_time' => 0,
+                        'count_time' => $rsTime,
                         'ip' => $reg->ip,
                         'mac' => $reg->mac_address,
                         'Google' => ($data) ? true : false

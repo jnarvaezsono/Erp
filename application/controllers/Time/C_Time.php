@@ -109,12 +109,10 @@ class C_Time extends Controller {
         
         $response['sw'] = $this->M_Time->validateDayFinished($this->input->post('id_time'));
         
-//        $count = $this->M_Time->getCountTotal();
+        $count = $this->M_Time->getCountTotal();
         
-//        $response['dias'] = $count['num'];
-//        $this->session->set_userdata('count_time', $count['num']);
-        $response['dias'] = 0;
-        $this->session->set_userdata('count_time', 0);
+        $response['dias'] = $count['num'];
+        $this->session->set_userdata('count_time', $count['num']);
         
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
