@@ -51,9 +51,7 @@
         <?php if(isset($BtnNewPpto)): ?>
             $(".dt-buttons").append('<label style="margin-left: 5px;"><a onclick="NewPpto()" class="btn btn-default btn-sm buttons-excel buttons-html5" tabindex="0" aria-controls="tabla_user" ><span><i class="fa fa-user-plus"></i> Nuevo</span></a></label>');
         <?php endif; ?>
-        <?php if($table == 4 && isset($BtnDupliPpto)): ?>
-            $(".dt-buttons").append('<label style="margin-left: 5px;"><a onclick="OpenCopy()" class="btn btn-default btn-sm buttons-excel buttons-html5" ><span><i class="fa fa-copy"></i> Duplicar</span></a></label>');
-        <?php endif; ?>
+        
         
         $('#id_fecha').daterangepicker({format: 'YYYY-MM-DD'});
         $('.select2').select2({closeOnSelect: false});
