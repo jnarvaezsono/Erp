@@ -6,14 +6,17 @@
         text-align: left;
     }
 </style>
+<?php 
+$lista = (!$pre_order)?'Radio':'PreRadio'
+?>
 <div class="content-wrapper">
     <section class="content-header">
         <h1 id="titulo">
-            <i class="fa fa-edit"></i>Nuevo Presupuesto Radio
+            <i class="fa fa-edit"></i><?=$title?>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Medios</a></li>
-            <li><a href="<?= base_url() ?>Radio">Listar</a></li>
+            <li><a href="<?= base_url($lista) ?>">Listar</a></li>
             <li class="active">Crear</li>
         </ol>
     </section>
@@ -504,12 +507,21 @@
             var formData = new FormData($('#form-detail')[0]);
             formData.append("psrad_id", id);
             formData.append("tipo", <?= $tipo ?>);
+            formData.append("tabla", '<?= $tabla ?>');
             formData.append("drad_tarifa", $('#drad_tarifa').val().replace(/\./g, '').replace(/,/g, '.'));
             formData.append("drad_global", $('#drad_global').val().replace(/\./g, '').replace(/,/g, '.'));
             formData.append("drad_total", $('#drad_total').val().replace(/\./g, '').replace(/,/g, '.'));
             
+            <?php if($lista == 'Radio'): ?>
+                var controller = "C_Ppto";
+                var edit = 'Edit';
+            <?php else: ?>
+                var controller = "C_Preorden";
+                var edit = 'EditOrden';
+            <?php endif; ?>
+            
             $.ajax({
-                url: "<?= base_url() ?>Managerbudget/C_Ppto/AddDetail",
+                url: "<?= base_url() ?>Managerbudget/"+controller+"/AddDetail",
                 type: 'POST',
                 data: formData,
                 success: function (data) {
@@ -517,7 +529,7 @@
                     if (obj.res == "OK") {
                         if(obj.reverse == ""){
                             swal({title: 'OK!', text: '', type: 'success'});
-                            window.location.replace('<?= base_url() ?>Radio/Edit/'+id+'/4');
+                            window.location.replace('<?= base_url() ?>Radio/'+edit+'/'+id+'/4');
                         }else{
                             swal({title: 'Warning!', text: obj.msg , type: 'error'});
                         }
@@ -548,6 +560,7 @@
             var psrad_total = $('#psrad_total').val().replace(/\./g, '').replace(/,/g, '.');
 
             var formData = new FormData($('#form')[0]);
+            formData.append("tabla", '<?= $tabla ?>');
             formData.append("tipo", <?= $tipo ?>);
             formData.append("psrad_desc", psrad_desc);
             formData.append("psrad_iva", psrad_iva);
@@ -560,7 +573,7 @@
             formData.append("usr_id", '<?=$this->session->UserMedios?>');
             formData.append("psrad_fecha", '<?=date("Y-m-d")?>');
             $.ajax({
-                url: "<?= base_url() ?>Managerbudget/C_Ppto/InsertInfo",
+                url: "<?= base_url() ?>Managerbudget/C_Ppto/InsertInfoMore",
                 type: 'POST',
                 data: formData,
                 success: function (data) {
@@ -570,7 +583,14 @@
                         $('#save').hide();
                         $('#add-detail ,#add-oc').show();
                         $('#btn-create').attr('onclick','AddDetail('+obj.id+')');
-                        $('#titulo').html('<i class="fa fa-edit"></i> Radio N°<small>'+obj.id+' Activo - Orden N° '+obj.ord_id+'</small>');
+                        
+                        <?php if($lista == 'Radio'): ?>
+                            var name = "Presupuesto De Radio";
+                        <?php else: ?>
+                            var name = "Pre Orden De Radio";
+                        <?php endif; ?>
+                            
+                        $('#titulo').html('<i class="fa fa-edit"></i> '+name+' N°<small>'+obj.id+' Activo - Orden N° '+obj.ord_id+'</small>');
                         swal({title: 'OK!', text: '', type: 'success'});
                     } else {
                         swal({title: 'Error!', text: obj.msg, type: 'error'});
@@ -601,6 +621,7 @@
             formData.append("ppto", id);
             formData.append("ord_id", ord_id);
             formData.append("tipo", <?= $tipo ?>);
+            formData.append("tabla", '<?= $tabla ?>');
             formData.append("psrad_desc", psrad_desc);
             formData.append("psrad_iva", psrad_iva);
             formData.append("psrad_valor", psrad_valor);
@@ -609,7 +630,7 @@
             formData.append("psrad_ivaspa", psrad_ivaspa);
             formData.append("total", psrad_total);
             $.ajax({
-                url: "<?= base_url() ?>Managerbudget/C_Ppto/UpdateInfo",
+                url: "<?= base_url() ?>Managerbudget/C_Preorden/UpdateInfo",
                 type: 'POST',
                 data: formData,
                 success: function (data) {

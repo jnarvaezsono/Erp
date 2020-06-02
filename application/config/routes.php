@@ -71,6 +71,9 @@ $route['Prensa/New/(:num)'] = 'Managerbudget/C_Ppto/NewP/$1';
 $route['Radio'] = 'Managerbudget/C_Ppto/GetList/4'; 
 $route['Radio/Edit/(:num)/(:num)'] = 'Managerbudget/C_Ppto/Edit/$1/$2';
 $route['Radio/New/(:num)'] = 'Managerbudget/C_Ppto/NewP/$1';
+$route['PreRadio'] = 'Managerbudget/C_Preorden/GetList/4';
+$route['Radio/NewOrden/(:num)'] = 'Managerbudget/C_Ppto/NewP/$1/true';
+$route['Radio/EditOrden/(:num)/(:num)'] = 'Managerbudget/C_Ppto/Edit/$1/$2/true';
 
 $route['Tv'] = 'Managerbudget/C_Ppto/GetList/5'; 
 $route['Tv/Edit/(:num)/(:num)'] = 'Managerbudget/C_Ppto/Edit/$1/$2';

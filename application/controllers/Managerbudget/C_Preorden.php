@@ -175,6 +175,7 @@ class C_Preorden extends Controller {
                 ((psav_valor - (psav_valor * (psav_desc / 100))) + ((psav_valor - (psav_valor * (psav_desc / 100))) * (psav_iva / 100)) 
                 + ((psav_valor - (psav_valor * (psav_desc / 100))) * (psav_spa / 100)) + (((psav_valor - (psav_valor * (psav_desc / 100))) * (psav_spa / 100)) * (psav_ivaspa / 100))
                 ) AS total';
+                unset($_POST['psav_id']);
                 break;
             case 2:
                 $table_det = 'det_clasi';
@@ -191,6 +192,7 @@ class C_Preorden extends Controller {
                 ((pscf_valor - (pscf_valor * (pscf_desc / 100))) + ((pscf_valor - (pscf_valor * (pscf_desc / 100))) * (pscf_iva / 100)) 
                 + ((pscf_valor - (pscf_valor * (pscf_desc / 100))) * (pscf_spa / 100)) + (((pscf_valor - (pscf_valor * (pscf_desc / 100))) * (pscf_spa / 100)) * (pscf_ivaspa / 100))
                 ) AS total';
+                unset($_POST['pscf_id']);
                 break;
             case 3:
                 $table_det = 'det_revis';
@@ -207,6 +209,7 @@ class C_Preorden extends Controller {
                 ((psrev_valor - (psrev_valor * (psrev_desc / 100))) + ((psrev_valor - (psrev_valor * (psrev_desc / 100))) * (psrev_iva / 100)) 
                 + ((psrev_valor - (psrev_valor * (psrev_desc / 100))) * (psrev_spa / 100)) + (((psrev_valor - (psrev_valor * (psrev_desc / 100))) * (psrev_spa / 100)) * (psrev_ivaspa / 100))
                 ) AS total';
+                unset($_POST['psrev_id']);
                 break;
             case 4:
                 $table_det = 'det_radio';
@@ -223,6 +226,7 @@ class C_Preorden extends Controller {
                 ((psrad_valor - (psrad_valor * (psrad_desc / 100))) + ((psrad_valor - (psrad_valor * (psrad_desc / 100))) * (psrad_iva / 100)) 
                 + ((psrad_valor - (psrad_valor * (psrad_desc / 100))) * (psrad_spa / 100)) + (((psrad_valor - (psrad_valor * (psrad_desc / 100))) * (psrad_spa / 100)) * (psrad_ivaspa / 100))
                 ) AS total';
+                unset($_POST['psrad_id']);
                 break;
             case 5:
                 $table_det = 'det_tv';
@@ -239,6 +243,7 @@ class C_Preorden extends Controller {
                 ((pstv_valor - (pstv_valor * (pstv_desc / 100))) + ((pstv_valor - (pstv_valor * (pstv_desc / 100))) * (pstv_iva / 100)) 
                 + ((pstv_valor - (pstv_valor * (pstv_desc / 100))) * (pstv_spa / 100)) + (((pstv_valor - (pstv_valor * (pstv_desc / 100))) * (pstv_spa / 100)) * (pstv_ivaspa / 100))
                 ) AS total';
+                unset($_POST['pstv_id']);
                 break;
             case 6:
                 $table_det = 'det_prode';
@@ -259,6 +264,7 @@ class C_Preorden extends Controller {
                 ((psex_valor - (psex_valor * (psex_desc / 100))) + ((psex_valor - (psex_valor * (psex_desc / 100))) * (psex_iva / 100)) 
                 + ((psex_valor - (psex_valor * (psex_desc / 100))) * (psex_spa / 100)) + (((psex_valor - (psex_valor * (psex_desc / 100))) * (psex_spa / 100)) * (psex_ivaspa / 100))
                 ) AS total';
+                unset($_POST['psex_id']);
                 break;
             case 7:
                 $table_det = 'det_prodi';
@@ -275,6 +281,7 @@ class C_Preorden extends Controller {
                 (psin_valor * (psin_desc / 100) ) AS descuento,
                 ((psin_valor - (psin_valor * (psin_desc / 100) )) * (psin_iva / 100)) AS iva,
                 ((psin_valor - (psin_valor * (psin_desc / 100) )) + ((psin_valor - (psin_valor * (psin_desc / 100) )) * (psin_iva / 100))) AS total';
+                unset($_POST['psin_id']);
                 break;
             case 8:
                 $table_det = 'det_pubext';
@@ -291,6 +298,7 @@ class C_Preorden extends Controller {
                 ((pubext_valor - (pubext_valor * (pubext_desc / 100))) + ((pubext_valor - (pubext_valor * (pubext_desc / 100))) * (pubext_iva / 100)) 
                 + ((pubext_valor - (pubext_valor * (pubext_desc / 100))) * (pubext_spa / 100)) + (((pubext_valor - (pubext_valor * (pubext_desc / 100))) * (pubext_spa / 100)) * (pubext_ivaspa / 100))
                 ) AS total';
+                unset($_POST['pubext_id']);
                 break;
             case 9:
                 $table_det = 'det_impresos';
@@ -307,6 +315,7 @@ class C_Preorden extends Controller {
                 ((imp_valor - (imp_valor * (imp_desc / 100))) + ((imp_valor - (imp_valor * (imp_desc / 100))) * (imp_iva / 100)) 
                 + ((imp_valor - (imp_valor * (imp_desc / 100))) * (imp_spa / 100)) + (((imp_valor - (imp_valor * (imp_desc / 100))) * (imp_spa / 100)) * (imp_ivaspa / 100))
                 ) AS total';
+                unset($_POST['imp_id']);
                 break;
             case 10:
                 $table_det = 'det_artpub';
@@ -323,6 +332,7 @@ class C_Preorden extends Controller {
                 ((artp_valor - (artp_valor * (artp_desc / 100))) + ((artp_valor - (artp_valor * (artp_desc / 100))) * (artp_iva / 100)) 
                 + ((artp_valor - (artp_valor * (artp_desc / 100))) * (artp_spa / 100)) + (((artp_valor - (artp_valor * (artp_desc / 100))) * (artp_spa / 100)) * (artp_ivaspa / 100))
                 ) AS total';
+                unset($_POST['artp_id']);
                 break;
 
             default:
