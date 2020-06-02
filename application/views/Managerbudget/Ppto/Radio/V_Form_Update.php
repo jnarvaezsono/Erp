@@ -6,15 +6,18 @@
         text-align: left;
     }
 </style>
+<?php 
+$lista = (!$pre_order)?'Radio':'PreRadio'
+?>
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            <i class="fa fa-edit"></i> Radio N&deg;
+            <i class="fa fa-edit"></i> <?=$title?>
             <small><?= $id ?> <?= $row->estado ?> - Orden N&deg; <?=$orden->ord_id?></small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Medios</a></li>
-            <li><a href="<?= base_url() ?>Radio">Listar</a></li>
+            <li><a href="<?= base_url($lista) ?>">Listar</a></li>
             <li class="active">Editar</li>
         </ol>
     </section>
@@ -538,12 +541,19 @@
             var formData = new FormData($('#form-detail')[0]);
             formData.append("psrad_id", <?= $id ?>);
             formData.append("tipo", <?= $tipo ?>);
+            formData.append("tabla", '<?= $tabla ?>');
             formData.append("drad_tarifa", $('#drad_tarifa').val().replace(/\./g, '').replace(/,/g, '.'));
             formData.append("drad_global", $('#drad_global').val().replace(/\./g, '').replace(/,/g, '.'));
             formData.append("drad_total", $('#drad_total').val().replace(/\./g, '').replace(/,/g, '.'));
             
+            <?php if($lista == 'Radio'): ?>
+                var controller = "C_Ppto";
+            <?php else: ?>
+                var controller = "C_Preorden";
+            <?php endif; ?>
+            
             $.ajax({
-                url: "<?= base_url() ?>Managerbudget/C_Ppto/AddDetail",
+                url: "<?= base_url() ?>Managerbudget/"+controller+"/AddDetail",
                 type: 'POST',
                 data: formData,
                 success: function (data) {
@@ -578,12 +588,19 @@
             formData.append("drad_id", id_detalle);
             formData.append("psrad_id", <?= $id ?>);
             formData.append("tipo", <?= $tipo ?>);
+            formData.append("tabla", '<?= $tabla ?>');
             formData.append("drad_tarifa", $('#drad_tarifa').val().replace(/\./g, '').replace(/,/g, '.'));
             formData.append("drad_global", $('#drad_global').val().replace(/\./g, '').replace(/,/g, '.'));
             formData.append("drad_total", $('#drad_total').val().replace(/\./g, '').replace(/,/g, '.'));
             
+            <?php if($lista == 'Radio'): ?>
+                var controller = "C_Ppto";
+            <?php else: ?>
+                var controller = "C_Preorden";
+            <?php endif; ?>
+            
             $.ajax({
-                url: "<?= base_url() ?>Managerbudget/C_Ppto/UpdateDetail",
+                url: "<?= base_url() ?>Managerbudget/"+controller+"/UpdateDetail",
                 type: 'POST',
                 data: formData,
                 success: function (data) {
@@ -624,6 +641,7 @@
             formData.append("ord_id", <?=$orden->ord_id?>);
             formData.append("ppto", <?= $id ?>);
             formData.append("tipo", <?= $tipo ?>);
+            formData.append("tabla", '<?= $tabla ?>');
             formData.append("psrad_desc", psrad_desc);
             formData.append("psrad_iva", psrad_iva);
             formData.append("psrad_valor", psrad_valor);
@@ -632,7 +650,7 @@
             formData.append("psrad_ivaspa", psrad_ivaspa);
             formData.append("total", psrad_total);
             $.ajax({
-                url: "<?= base_url() ?>Managerbudget/C_Ppto/UpdateInfo",
+                url: "<?= base_url() ?>Managerbudget/C_Preorden/UpdateInfo",
                 type: 'POST',
                 data: formData,
                 success: function (data) {
@@ -656,6 +674,12 @@
     }
     
     function DeleteDetail(id_detalle){
+        <?php if($lista == 'Radio'): ?>
+            var controller = "C_Ppto";
+        <?php else: ?>
+            var controller = "C_Preorden";
+        <?php endif; ?>
+            
         swal({
             title: 'Confirmar!',
             text: "Eliminar detalle",
@@ -667,10 +691,11 @@
             reverseButtons: true
         }).then((result) => {
             if (result) {
-                $.post('<?= base_url() ?>Managerbudget/C_Ppto/DeleteDetail',{
+                $.post('<?= base_url() ?>Managerbudget/'+controller+'/DeleteDetail',{
                     id_detalle:id_detalle,
                     ppto:<?= $id ?>,
                     tipo:<?= $tipo ?>,
+                    tabla: '<?= $tabla ?>'
                 },function(data){
                     if(data.res == 'OK'){
                         swal({title: 'OK!', text: '', type: 'success'});
