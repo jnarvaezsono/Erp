@@ -34,9 +34,11 @@
                                     }
                                     if($v->festivo == 1 || $v->num >= 6){
                                         $img = '<img style="width:15px;"  data-placement="top" title="Tiempo No Obligatorio" src="' . base_url() . 'dist/img/icon-image/amarillo.png">';
+                                    }elseif($v->id_estado == 5){
+                                        $img = '<img style="width:15px;"  data-placement="top" title="Vacaciones" src="' . base_url() . 'dist/img/vacaciones.png">';
                                     }
                                     ?>
-                                    <tr ondblclick="showDetail(this,<?= $v->id_time ?>, '<?= $v->fecha ?>', <?=$count++?>, <?=$v->id_estado?>)" style="cursor: pointer" >
+                                <tr ondblclick="showDetail(this,<?= $v->id_time ?>, '<?= $v->fecha ?>', <?=$count++?>, <?=$v->id_estado?>)" style="cursor: pointer" >
                                         <td style="text-align:center;"><?php if($count <= 2 || $v->id_estado == 10){ ?><i class="fa fa-pencil"></i><?php } ?></td>
                                         <td style="text-align:left;"><?= strftime("%A, %d de %B", strtotime($v->fecha)) ?></td>
                                         <td style="text-align:center;" id="img-<?= $v->id_time ?>"><?= $img ?></td>
