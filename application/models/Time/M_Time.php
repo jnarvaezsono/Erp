@@ -44,14 +44,23 @@ class M_Time extends VS_Model {
     }
 
     function LoadMyTask($usuario) {
+        
+        if(in_array($this->session->IdRol, array('8'))){
+            $this->db->where("id_cliente", 1339);
+        }else if(in_array($this->session->IdRol, array('26'))){
+            $this->db->where("id_cliente <> 1339");
+        }else{
+            $this->db->where("(t.id_responsable LIKE '" . $usuario . "' OR t.id_responsable LIKE '" . $usuario . ",%'
+                        OR t.id_responsable LIKE '%," . $usuario . "'
+                        OR t.id_responsable LIKE '%," . $usuario . ",%') ");
+        }
+        
         $result = $this->db->select('*')
                 ->from('sys_tareas_op t')
                 ->join('sys_op o', 't.id_op = o.id_op')
-                ->where("(t.id_responsable LIKE '" . $usuario . "' OR t.id_responsable LIKE '" . $usuario . ",%'
-                        OR t.id_responsable LIKE '%," . $usuario . "'
-                        OR t.id_responsable LIKE '%," . $usuario . ",%') ")
+                
                 ->order_by('t.id_tarea', 'desc')
-                ->limit(10, 0)
+                ->limit(50, 0)
                 ->get();
         return $result->result();
     }
