@@ -32,10 +32,10 @@
                                     } else if ($v->id_estado == 9) {
                                         $img = '<img style="width:15px;" data-placement="top" title="Tiempo Completo" src="' . base_url() . 'dist/img/icon-image/verde.png">';
                                     }
-                                    if($v->festivo == 1 || $v->num >= 6){
-                                        $img = '<img style="width:15px;"  data-placement="top" title="Tiempo No Obligatorio" src="' . base_url() . 'dist/img/icon-image/amarillo.png">';
-                                    }elseif($v->id_estado == 5){
+                                    if($v->id_estado == 5){
                                         $img = '<img style="width:15px;"  data-placement="top" title="Vacaciones" src="' . base_url() . 'dist/img/vacaciones.png">';
+                                    }elseif($v->festivo == 1 || $v->num >= 6){
+                                        $img = '<img style="width:15px;"  data-placement="top" title="Tiempo No Obligatorio" src="' . base_url() . 'dist/img/icon-image/amarillo.png">';
                                     }
                                     ?>
                                 <tr ondblclick="showDetail(this,<?= $v->id_time ?>, '<?= $v->fecha ?>', <?=$count++?>, <?=$v->id_estado?>)" style="cursor: pointer" >
