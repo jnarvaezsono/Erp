@@ -1098,7 +1098,7 @@ class C_Preorden extends Controller {
         }
         
         $id_ppto = $this->M_Preorden->InsertInfo($cab, $data);
-        $this->M_Preorden->InsertDetail($table_Det,$field_id,$id_ppto,$this->orden);
+        $this->M_Preorden->InsertDetail($table_Det,$field_id,array($field_id=>$id_ppto),$this->orden);
         $this->M_Preorden->UpdateOrdProveedor($id_ppto,$this->orden,$tpo);
         $this->M_Preorden->UpdateStatusOrden($this->tipo,$this->orden, 39); 
         echo json_encode(array('ppto'=>$id_ppto,'res'=>'OK'));

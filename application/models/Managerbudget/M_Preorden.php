@@ -757,7 +757,8 @@ class M_Preorden extends VS_Model {
                         ->get();
                 break;
             case "4":
-                $result = $this->db->select('*')
+                $result = $this->db->select('curdate() as psrad_fecha,pvcl_id_clie,pdcl_id,camp_id,pvcl_id_prov,tpsv_id,r.psrad_observa,r.psrad_comentario,r.psrad_valor,r.psrad_desc,r.psrad_iva,r.psrad_ivaspa,
+                                            r.psrad_spa,r.psrad_total,r.medio_id,r.usr_id,r.usr_mod,r.psrad_numorden,r.psrad_numcotizacion')
                         ->from($tabla.' r')
                         ->where('psrad_id', $ppto)
                         ->get();
@@ -819,9 +820,9 @@ class M_Preorden extends VS_Model {
         $this->db->update('ordenes', $data);
     }
     
-    function InsertDetail($table_Det,$field_id,$id_ppto,$pre_orden){
+    function InsertDetail($table_Det,$field_id,$data,$pre_orden){
         $this->db->where('id_preorden',$pre_orden);
-        $this->db->update($table_Det,array('pscf_id'=>$id_ppto));
+        $this->db->update($table_Det,$data);
     }
     
     function UpdateOrdProveedor($id_ppto,$preorden,$tipo){
