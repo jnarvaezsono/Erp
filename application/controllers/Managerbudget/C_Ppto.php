@@ -456,11 +456,13 @@ class C_Ppto extends Controller {
         sort($array);
         $tipo = $this->input->post('tipo');
         $errors = '';
+
+        $tabla = $this->showTable($tipo);
         
         $result = array('res'=>'empty');
         foreach ($array as $value) {
             
-            $row = $this->M_Manager->GetPpto($value, $tipo);
+            $row = $this->M_Manager->GetPpto($value, $tipo, $tabla['cab']);
             $validate = $this->ValidateCredit($row->cliente, false, $row->total);
             
             if ($validate['res'] != 'LOCKED') {
@@ -475,6 +477,45 @@ class C_Ppto extends Controller {
         }
         $result['errors'] = $errors;
         echo json_encode($result);
+    }
+
+    function showTable($tipo){
+        switch ($tipo) {
+            case 1:
+                $data['cab'] = 'presup_avisos';
+                break;
+            case 2:
+                $data['cab']  = 'presup_clasificados';
+                break;
+            case 3:
+                $data['cab']  = 'presup_revis';
+                break;
+            case 4:
+                $data['cab']  = 'presup_radio';
+                break;
+            case 5:
+                $data['cab']  = 'presup_tv';
+                break;
+            case 6:
+                $data['cab']  = 'presup_prode';
+                break;
+            case 7:
+                $data['cab']  = 'presup_prodi';
+                break;
+            case 8:
+                $data['cab']  = 'publicidad_exterior';
+                break;
+            case 9:
+                $data['cab']  = 'impresos';
+                break;
+            case 10:
+                $data['cab']  = 'art_publi';
+                break;
+
+            default:
+                break;
+        }
+        return $data;
     }
 
     function Copy() {
