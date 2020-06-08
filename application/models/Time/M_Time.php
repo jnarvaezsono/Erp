@@ -44,21 +44,20 @@ class M_Time extends VS_Model {
     }
 
     function LoadMyTask($usuario) {
-        
-        if(in_array($this->session->IdRol, array('8'))){
+
+        if (in_array($this->session->IdRol, array('8'))) {
             $this->db->where("id_cliente", 1339);
-        }else if(in_array($this->session->IdRol, array('26'))){
+        } else if (in_array($this->session->IdRol, array('26'))) {
             $this->db->where("id_cliente <> 1339");
-        }else{
+        } else {
             $this->db->where("(t.id_responsable LIKE '" . $usuario . "' OR t.id_responsable LIKE '" . $usuario . ",%'
                         OR t.id_responsable LIKE '%," . $usuario . "'
                         OR t.id_responsable LIKE '%," . $usuario . ",%') ");
         }
-        
+
         $result = $this->db->select('*')
                 ->from('sys_tareas_op t')
                 ->join('sys_op o', 't.id_op = o.id_op')
-                
                 ->order_by('t.id_tarea', 'desc')
                 ->limit(50, 0)
                 ->get();
@@ -88,6 +87,67 @@ class M_Time extends VS_Model {
         $this->db->insert_batch('sys_timesheet', $insert);
     }
 
+    function LoadrangeUser($usuario, $ini, $fin) {
+        $result = $this->db->query("SELECT m.fecha as y  ,SUBSTRING(REPLACE(SEC_TO_TIME(SUM( if(d.task > 0,TIME_TO_SEC (d.TIME),0))),':','.'),1,5) AS item1 FROM sys_timesheet m
+                                    join sys_timesheet_detail d ON m.id_time = d.id_time
+                                    left JOIN sys_tareas_op t ON d.task = t.id_tarea
+                                    WHERE m.id_users = $usuario AND m.fecha BETWEEN '$ini' AND '$fin'
+                                    GROUP BY m.fecha ORDER BY d.fecha ASC");
+
+        return array('num' => $result->num_rows(), 'rows' => $result->result());
+    }
+
+    function grafOne($ini, $fin, $all = false) {
+
+        if (!$all)
+            $this->db->group_by("d.`type`");
+
+        $result = $this->db->select("d.`type`,COUNT(*) AS cantidad")
+                        ->from("sys_timesheet_detail d")
+                        ->join("sys_timesheet t ", " d.id_time = t.id_time")
+                        ->where("t.fecha BETWEEN '$ini' AND '$fin'")->get();
+        if (!$all) {
+            return array('num' => $result->num_rows(), 'rows' => $result->result());
+        } else {
+            return $result->row();
+        }
+    }
+
+    function grafTwo($ini, $fin, $all = false) {
+
+        if (!$all)
+            $this->db->group_by("IFNULL(c.nombre,cl.nombre)");
+
+        $result = $this->db->select("SEC_TO_TIME( SUM(TIME_TO_SEC(d.time))) AS tiempo,IFNULL(c.nombre,cl.nombre) AS clientem,IFNULL(c.nombre,cl.nombre) AS cliente,HOUR(SEC_TO_TIME( SUM(TIME_TO_SEC(d.time)))) as hora")
+                        ->from("sys_timesheet t ", " d.id_time = t.id_time")
+                        ->join('sys_timesheet_detail d', 't.id_time = d.id_time')
+                        ->join('sys_tareas_op o', 'o.id_tarea = d.task', 'left')
+                        ->join('sys_op op', 'o.id_op = op.id_op', 'left')
+                        ->join('sys_clients cl', 'op.id_cliente = cl.id_client', 'left')
+                        ->join('sys_clients c', 'd.cliente = c.id_client', 'left')
+                        ->where("d.`type` IN ('Tarea','Tarea Sin OP')")
+                        ->where("t.fecha BETWEEN '$ini' AND '$fin'")
+                        ->order_by('IFNULL(c.nombre,cl.nombre)')->get();
+
+        if (!$all) {
+            return array('num' => $result->num_rows(), 'rows' => $result->result());
+        } else {
+            return $result->row();
+        }
+    }
+
+    function tableTree() {
+        $result = $this->db->select('u.name, COUNT(t.id_time) AS dias')
+                ->from('sys_timesheet t')
+                ->join('sys_users u ',' t.id_users = u.id_users')
+                ->where('t.id_estado = 10 AND t.num NOT IN (6, 7) AND t.festivo != 1 AND t.fecha <= CURDATE()')
+                ->group_by('t.id_users')
+                ->order_by('COUNT(t.id_time)','desc')
+                ->get();
+        
+        return $result->result();
+    }
+
     function LoadTimesClients($periodo, $id_client = false) {
 
         if ($id_client)
@@ -107,23 +167,33 @@ class M_Time extends VS_Model {
         return array('num' => $result->num_rows(), 'rows' => $result->result());
     }
 
-    function LoadrangeUser($usuario, $ini, $fin) {
-        $result = $this->db->query("SELECT m.fecha as y  ,SUBSTRING(REPLACE(SEC_TO_TIME(SUM( if(d.task > 0,TIME_TO_SEC (d.TIME),0))),':','.'),1,5) AS item1 FROM sys_timesheet m
-                                    join sys_timesheet_detail d ON m.id_time = d.id_time
-                                    left JOIN sys_tareas_op t ON d.task = t.id_tarea
-                                    WHERE m.id_users = $usuario AND m.fecha BETWEEN '$ini' AND '$fin'
-                                    GROUP BY m.fecha ORDER BY d.fecha ASC");
+    function getCountTotal() {
+        $result = $this->db->query("SELECT * FROM sys_timesheet t 
+                                    WHERE t.id_users = " . $this->session->IdUser . " 
+                                    AND t.id_estado = 10  AND t.num not in (6,7)  AND t.festivo != 1 
+                                    AND t.fecha <= DATE_SUB(CURDATE(),INTERVAL 2 DAY)");
 
         return array('num' => $result->num_rows(), 'rows' => $result->result());
     }
 
-    function getCountTotal() {
-        $result = $this->db->query("SELECT * FROM sys_timesheet t 
-                                    WHERE t.id_users = ".$this->session->IdUser." 
-                                    AND t.id_estado = 10  AND t.num not in (6,7)  AND t.festivo != 1 
-                                    AND t.fecha <= DATE_SUB(CURDATE(),INTERVAL 2 DAY)");
-        
-        return array('num' => $result->num_rows(), 'rows' => $result->result());
+    function LoadTimesUser($ini, $fin, $usuario) {
+
+        if ($usuario != 'ALL')
+            $this->db->where('t.id_users', $usuario);
+
+        $result = $this->db->select('u.name AS nombre,d.time AS tiempo,d.`type` AS accion,d.actividad ,IFNULL(c.nombre,cl.nombre) AS cliente,d.solicitante,d.text AS descripcion,t.fecha')
+                ->from('sys_timesheet t')
+                ->join('sys_users u', 't.id_users = u.id_users')
+                ->join('sys_timesheet_detail d', 't.id_time = d.id_time')
+                ->join('sys_tareas_op o', 'o.id_tarea = d.task', 'left')
+                ->join('sys_op op', 'o.id_op = op.id_op', 'left')
+                ->join('sys_clients cl', 'op.id_cliente = cl.id_client', 'left')
+                ->join('sys_clients c', 'd.cliente = c.id_client', 'left')
+                ->where("t.fecha BETWEEN '$ini' AND '$fin'")
+                ->order_by('u.name,t.fecha')
+                ->get();
+//        echo $this->db->last_query();exit();
+        return $result->result();
     }
 
 }

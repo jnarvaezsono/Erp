@@ -1,150 +1,163 @@
+<?php setlocale(LC_TIME, LOCALE); ?>
 <div class="content-wrapper">
     <section class="content">
         <div class="row">
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3>150</h3>
-                        <p>New Orders</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                        <p>Bounce Rate</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3>44</h3>
-
-                        <p>User Registrations</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3>65</h3>
-
-                        <p>Unique Visitors</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <section class="col-lg-8 connectedSortable">
+            <section class="col-md-12 connectedSortable">
                 <div class="box box-info">
-                    <div class="box-header">
-                        <i class="fa fa-bar-chart-o"></i>
-
-                        <h3 class="box-title" id="title-hclient">Horas por cliente. Periodo <?= date('Y-m') ?></h3>
-                        <!-- tools box -->
-                        <div class="pull-right box-tools">
-                            <button type="button" class="btn btn-primary btn-sm  pull-right" id="hclient"><i class="fa fa-calendar"></i></button>
-                        </div>
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Informe detallado por usuario</h3>
                     </div>
-                    <div class="box-body">
-                        <div id="bar-example"></div>
-                    </div>
-                    <div class="box-footer clearfix">
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form id="form-buscar" class="form-horizontal">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">Usuarios</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control select2 " required id="users">
+                                        <option value="ALL"> TODOS </option>
+                                        <?php foreach ($users as $v) : ?>
+                                            <option value="<?= $v->id_users ?>"><?= $v->name ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">Fecha</label>
 
-                    </div>
-                </div>
-
-                <div class="box box-info">
-                    <div class="box-header">
-                        <i class="fa fa-bar-chart-o"></i>
-
-                        <h3 class="box-title" id="title-hclient-range">Horas por cliente. Periodo <?= date('Y-m') ?></h3>
-                        <!-- tools box -->
-                        <div class="pull-right box-tools">
-                            <button type="button" class="btn btn-primary btn-sm  pull-right" id="hclient-range"><i class="fa fa-calendar"></i></button>
-                        </div>
-                        <!-- /. tools -->
-                    </div>
-                    <div class="box-body">
-                        <div id="bar-range"></div>
-                    </div>
-                    <div class="box-footer clearfix">
-
-                    </div>
-                </div>
-
-                <div class="box box-info">
-                    <div class="box-header">
-                        <i class="fa fa-area-chart"></i>
-
-                        <h3 class="box-title">Horas por usuario en OP</h3>
-                        <!-- tools box -->
-                        <div class="pull-right box-tools">
-                            <button type="button" class="btn btn-primary btn-sm daterange pull-right" style="margin: 3px;" id="range-user" data-toggle="tooltip" title="" data-original-title="Date range"><i class="fa fa-calendar"></i></button>
-                            <div class="form-group pull-right">
-                                <select class="form-control select2" style="min-width: 200px;" id="users" onchange="SendRange()">
-                                    <?php foreach ($users as $v) : ?>
-                                        <option value="<?= $v->id_users ?>" <?= ($v->id_users == 1) ? 'selected' : '' ?>><?= $v->name ?></option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" required id="id_fecha" >
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <!-- /. tools -->
-                    </div>
-                    <div class="box-body">
-                        <div class="chart" id="revenue-chart" style="position: relative; height: 300px;"></div>
-                    </div>
-                    <div class="box-footer clearfix">
-
-                    </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-info pull-right">Descargar</button>
+                        </div>
+                        <!-- /.box-footer -->
+                    </form>
                 </div>
-
-
             </section>
-            <!-- /.Left col -->
-            <!-- right col (We are only adding the ID to make the widgets sortable)-->
-            <section class="col-lg-4 connectedSortable">
-
-                <div class="box box-info">
+            <section class="col-lg-8 col-md-8 connectedSortable">
+                <div class="box box-primary">
                     <div class="box-header">
-                        <i class="fa fa-envelope"></i>
+                        <i class="fa fa-bar-chart-o"></i>
 
-                        <h3 class="box-title" id="title-hclient" ></h3>
+                        <h3 class="box-title title-one">Cantidad de horas por actividad. Ultimnos 7 días </h3>
                         <!-- tools box -->
                         <div class="pull-right box-tools">
-                            <button type="button" class="btn btn-primary btn-sm daterange pull-right" ><i class="fa fa-calendar"></i></button>
+                            <!--<button type="button" class="btn btn-primary btn-sm  pull-right" id="hclient-range"><i class="fa fa-calendar"></i></button>-->
+                            <button type="button" class="btn btn-primary btn-sm daterange pull-right" style="margin: 3px;" id="range-grafone" data-toggle="tooltip" title="" data-original-title="Date range"><i class="fa fa-calendar"></i></button>
                         </div>
                         <!-- /. tools -->
                     </div>
                     <div class="box-body">
-                        <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
+                        <div id="bar-one"></div>
                     </div>
                     <div class="box-footer clearfix">
 
                     </div>
                 </div>
+                <div class="box box-success">
+                    <div class="box-header">
+                        <i class="fa fa-bar-chart-o"></i>
 
+                        <h3 class="box-title title-two">Cantidad de horas por cliente. Ultimnos 7 días</h3>
+                        <!-- tools box -->
+                        <div class="pull-right box-tools">
+                            <!--<button type="button" class="btn btn-primary btn-sm  pull-right" id="hclient-range"><i class="fa fa-calendar"></i></button>-->
+                            <button type="button" class="btn btn-success btn-sm daterange pull-right" style="margin: 3px;" id="range-graftwo" data-toggle="tooltip" title="" data-original-title="Date range"><i class="fa fa-calendar"></i></button>
+                        </div>
+                        <!-- /. tools -->
+                    </div>
+                    <div class="box-body">
+                        <div id="bar-two"></div>
+                    </div>
+                    <div class="box-footer clearfix">
+
+                    </div>
+                </div>
+            </section>
+            <section class="col-lg-4 col-md-4 connectedSortable">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title title-one">Cantidad de horas por actividad. Ultimnos 7 días </h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <table class="table table-condensed" id="table-grafone">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Acción</th>
+                                    <th>Cantidad</th>
+                                    <th>Progress</th>
+                                    <th style="width: 40px">Label</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="box box-success">
+                    <div class="box-header">
+                        <h3 class="box-title title-two">Cantidad de horas por cliente. Ultimnos 7 días </h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <table class="table table-condensed" id="table-graftwo">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Acción</th>
+                                    <th>Cantidad</th>
+                                    <th>Progress</th>
+                                    <th style="width: 40px">Label</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+            
+            <section class="col-lg-4 col-md-4 connectedSortable">
+                <div class="box box-danger">
+                    <div class="box-header">
+                        <h3 class="box-title title-two">Dias por completar </h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <table class="table table-condensed" id="table-tree">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Usuario</th>
+                                    <th>Días Faltantes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $count = 1; foreach ($table as $v) :  ?>
+                                    <tr>
+                                        <td style="widtd: 10px"><?=$count++?></td>
+                                        <td><?=$v->name?></td>
+                                        <td><span class="badge bg-red"><?=$v->dias?></span></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </section>
 
         </div>
@@ -153,71 +166,26 @@
 <script>
     $(function () {
 
-        $('.select2').select2();
+        $(".select2").select2();
+        $('#id_fecha').daterangepicker({locale: {format: 'YYYY-MM-DD'}});
 
-//        $('.connectedSortable').sortable({
-//            placeholder: 'sort-highlight',
-//            connectWith: '.connectedSortable',
-//            handle: '.box-header, .nav-tabs',
-//            forcePlaceholderSize: true,
-//            zIndex: 999999
-//        });
-//        $('.connectedSortable .box-header, .connectedSortable .nav-tabs-custom').css('cursor', 'move');
-
-        $('#hclient').datepicker({
-            autoclose: true,
-            format: "yyyy-mm",
-            viewMode: "months",
-            minViewMode: "months",
-            orientation: 'bottom'
-        }).on('changeDate', function (e) {
-            var date = new Date(e.date);
-            var month = (date.getMonth() + 1);
-            var per = date.getFullYear() + '' + ((month < 10) ? '0' + month : month);
-            LoadTimesClients(per);
-            $('#title-hclient').html('Horas por cliente. Periodo ' + per);
-        });
-
-        $('#hclient-range').datepicker({
-            autoclose: true,
-            format: "yyyy-mm",
-            viewMode: "months",
-            minViewMode: "months",
-            orientation: 'bottom'
-        }).on('changeDate', function (e) {
-            var date = new Date(e.date);
-            var month = (date.getMonth() + 1);
-            var per = date.getFullYear() + '' + ((month < 10) ? '0' + month : month);
-
-            date.setMonth(date.getMonth() - 1);
-            var month = (date.getMonth() + 1);
-            var perOld = date.getFullYear() + '' + ((month < 10) ? '0' + month : month);
-
-
-            LoadTimesClientsRange(per, perOld);
-            $('#title-hclient-range').html('Horas por cliente. Periodo ' + perOld + ' - ' + per);
+        $("#form-buscar").submit(function (event) {
+            event.preventDefault();
+            downloadExcel();
         });
 
         var date = new Date();
         var month = (date.getMonth() + 1);
-        var per = date.getFullYear() + '' + ((month < 10) ? '0' + month : month);
+        var per = date.getFullYear() + '-' + ((month < 10) ? '0' + month : month) + '-01';
 
         date.setMonth(date.getMonth() - 1);
         var month = (date.getMonth() + 1);
         var perOld = date.getFullYear() + '' + ((month < 10) ? '0' + month : month);
 
-        $('#title-hclient').html('Horas por cliente. Periodo ' + per);
-        $('#title-hclient-range').html('Horas por cliente. Periodo ' + perOld + ' - ' + per);
-        LoadTimesClients(per);
-        LoadTimesClientsRange(per, perOld);
-        
-        var date = new Date();
-        var inicio = new Date(date.setDate(date.getDate() - 6));
-        var mm = inicio.getMonth() + 1; 
-        LoadrangeUser(inicio.getFullYear() + '-' + ((mm < 10) ? '0' + mm : mm) + '-' + inicio.getDate(), ShowDateJS())
+        grafOne(per, ShowDateJS(), true);
+        grafTwo(per, ShowDateJS(), true);
 
-
-        $('#range-user').daterangepicker({
+        $('#range-grafone').daterangepicker({
             ranges: {
                 'Hoy': [moment(), moment()],
                 'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -229,85 +197,89 @@
             startDate: moment().subtract(6, 'days'),
             endDate: moment()
         }, function (start, end) {
-            LoadrangeUser(start.format('YYYY-MM-D'), end.format('YYYY-MM-D'));
+            grafOne(start.format('YYYY-MM-D'), end.format('YYYY-MM-D'), false);
         });
 
-        // Donut Chart
-        var donut = new Morris.Donut({
-            element: 'sales-chart',
-            resize: true,
-            colors: ['#3c8dbc', '#f56954', '#00a65a'],
-            data: [
-                {label: 'Download Sales', value: 12},
-                {label: 'In-Store Sales', value: 30},
-                {label: 'Mail-Order Sales', value: 20}
-            ],
-            hideHover: 'auto'
+        $('#range-graftwo').daterangepicker({
+            ranges: {
+                'Hoy': [moment(), moment()],
+                'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Ultimos 7 Dias': [moment().subtract(6, 'days'), moment()],
+                'Ultimos 30 Dias': [moment().subtract(29, 'days'), moment()],
+                'Mes Actual': [moment().startOf('month'), moment().endOf('month')],
+                'Mes Anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            startDate: moment().subtract(6, 'days'),
+            endDate: moment()
+        }, function (start, end) {
+            grafTwo(start.format('YYYY-MM-D'), end.format('YYYY-MM-D'), false);
         });
 
 
     });
-    
-    function SendRange(){
-        var date = new Date();
-        var inicio = new Date(date.setDate(date.getDate() - 6));
-        var mm = inicio.getMonth() + 1; 
-        LoadrangeUser(inicio.getFullYear() + '-' + ((mm < 10) ? '0' + mm : mm) + '-' + inicio.getDate(), ShowDateJS());
-    }
 
-    function LoadTimesClientsRange(per, perOld) {
-        $.post('<?= base_url() ?>Time/C_TimeClient/LoadTimesClientsRange', {periodo: per, old: perOld}, function (data) {
-            $("#bar-range").empty();
-            if (data.clients.length > 0) {
-                Morris.Bar({
-                    element: 'bar-range',
-                    data: data.clients,
-                    xkey: 'y',
-                    ykeys: ['a', 'b'],
-                    labels: ['Horas Mes Anterior', 'Horas Mes Seleccionado']
-                });
+    function downloadExcel() {
+        var result = $("#id_fecha").val().split(' - ');
+        var fecha_ini = result[0];
+        var fecha_fin = result[1];
+
+
+        $(".loader_ajax2").text("Creando Archivo");
+        $.post("<?= base_url() ?>Time/C_TimeClient/downloadExcel", {fecha_fin: fecha_fin, fecha_ini: fecha_ini, usuario: $('#users').val()}, function (data) {
+                    if (data.result != 'ok') {
+                        alertify.error("Ha ocurrido un error al descargar el archivo");
+                        return false;
+                    } else {
+                        window.location.replace("<?= base_url() ?>Time/C_TimeClient/downloadExcel/" + data.archivo);
+                    }
+                }, 'JSON');
             }
-        }, 'json');
-    }
 
-    function LoadTimesClients(periodo) {
-        $.post('<?= base_url() ?>Time/C_TimeClient/LoadTimesClients', {periodo: periodo}, function (data) {
-            var datos = [];
-            $.each(data.clients, function (e, i) {
-                datos.push({y: i.nombre, b: i.sumtime});
-            });
-            $("#bar-example").empty();
-            if (datos.length > 0) {
-                Morris.Bar({
-                    element: 'bar-example',
-                    data: datos,
-                    xkey: 'y',
-                    ykeys: ['b'],
-                    labels: ['Horas Trabajadas']
-                });
+            function grafOne(per, perOld, sw) {
+                $.post('<?= base_url() ?>Time/C_TimeClient/getGrafOne', {ini: per, fin: perOld}, function (data) {
+                    $("#bar-one").empty();
+                    $('#table-grafone > tbody').html('<tr><td colspan="4">Sin datos</td></tr>');
+                    if (!sw) {
+                        $(".title-one").html('Cantidad de horas por actividad. ' + data.title);
+                    }
+                    if (data.data.length > 0) {
+                        Morris.Bar({
+                            element: 'bar-one',
+                            data: data.data,
+                            xkey: 'y',
+                            ykeys: ['a'],
+                            resize: true,
+                            labels: ['Horas Trabajadas']
+                        });
+
+                        $('#table-grafone > tbody').html(data.table);
+
+                    }
+                }, 'json');
             }
-        }, 'json');
-    }
 
-    function LoadrangeUser(inicio, fin) {
-        $.post('<?= base_url() ?>Time/C_TimeClient/LoadrangeUser', {user:$('#users').val(),ini: inicio, fin: fin}, function (data) {
+            function grafTwo(per, perOld, sw) {
+                $.post('<?= base_url() ?>Time/C_TimeClient/getGrafTwo', {ini: per, fin: perOld}, function (data) {
+                    $("#bar-two").empty();
+                    if (!sw) {
+                        $(".title-two").html('Cantidad de horas por cliente.. ' + data.title);
+                    }
+                    $('#table-graftwo > tbody').html('<tr><td colspan="4">Sin datos</td></tr>');
+                    if (data.data.length > 0) {
+                        Morris.Bar({
+                            element: 'bar-two',
+                            data: data.data,
+                            barColors: ['#00a65a', '#f56954'],
+                            xkey: 'y',
+                            ykeys: ['a'],
+                            resize: true,
+                            labels: ['Horas Por Cliente']
+                        });
 
-            $("#revenue-chart").empty();
-            if (data.clients.length > 0) {
-                var area = new Morris.Line({
-                    element: 'revenue-chart',
-                    resize: true,
-                    data: data.clients,
-                    xkey: 'y',
-                    ykeys: ['item1'],
-                    labels: ['Horas Trabajadas'],
-                    lineColors: ['#3c8dbc'],
-                    hideHover: 'auto'
-                });
+                        $('#table-graftwo > tbody').html(data.table);
+
+                    }
+                }, 'json');
             }
-        }, 'json');
-    }
-
-
 
 </script>
