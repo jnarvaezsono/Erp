@@ -159,7 +159,7 @@ class C_OP extends Controller {
             } else if ($v->id_estado == 13) {
                 $icon = '<img style="width:25px;margin-left:5px" data-toggle="tooltip" data-placement="top" title="Tarea cerrada" src="' . base_url() . 'dist/img/icon-image/valid.png" />';
             }
-            $array[] = array('<span class="label label-' . $v->color . '">' . $v->estado . '</span>', $icon, $v->id_op, $v->id_tarea, $v->categoria, $v->nombre, $v->creador, $v->fecha_creacion, $v->fecha_entrega, $v->modalidad_cobro, strip_tags($v->descripcion), $v->responsable, $v->presupuesto);
+            $array[] = array('<span class="label label-' . $v->color . '">' . $v->estado . '</span>', $icon, $v->id_op, $v->id_tarea, $v->categoria, $v->nombre, $v->creador, $v->fecha_creacion, $v->fecha_entrega, $v->modalidad_cobro, strip_tags($v->descripcion), $v->responsable, $v->presupuesto, $v->camp_nombre);
 //          $array[] = array($v->id_op, $v->id_tarea, $v->categoria,$v->nombre,  $v->fecha_entrega, $v->fecha_cierre, $v->descripcion, $v->responsable, (empty($v->tiempo_estimado)) ? '<span class="fa fa-clock-o" aria-hidden="true" id="time-' . $v->id_tarea . '" onclick="OpenModal(' . $v->id_tarea . ')"></span>' : $v->tiempo_estimado, '<span class="label label-' . $v->color . '">' . $v->estado . '</span>', '<button class="btn btn-block btn-primary btn-xs" onclick="OpenTask(' . $v->id_tarea . ')"><span class="fa fa-sign-in" aria-hidden="true"></span></button>');
         }
 

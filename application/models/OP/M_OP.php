@@ -194,13 +194,14 @@ class M_OP extends VS_Model {
             }
         }
 
-        $result = $this->db->select('t.id_tarea,t.id_op,un.descripcion AS unidad,c.descripcion AS categoria,DATE_FORMAT(t.fecha_creacion, "%Y%-%m%-%d") as fecha_creacion,t.fecha_entrega,t.fecha_cierre,t.descripcion,s.description AS estado,t.id_estado,s.color,t.tiempo_estimado,f_responsables(t.id_responsable) AS responsable, cl.nombre,t.presupuesto, u.name as creador,DATEDIFF(t.fecha_entrega,CURRENT_DATE()) as dias,t.modalidad_cobro')
+        $result = $this->db->select('t.id_tarea,t.id_op,un.descripcion AS unidad,c.descripcion AS categoria,DATE_FORMAT(t.fecha_creacion, "%Y%-%m%-%d") as fecha_creacion,t.fecha_entrega,t.fecha_cierre,t.descripcion,s.description AS estado,t.id_estado,s.color,t.tiempo_estimado,f_responsables(t.id_responsable) AS responsable, cl.nombre,t.presupuesto, u.name as creador,DATEDIFF(t.fecha_entrega,CURRENT_DATE()) as dias,t.modalidad_cobro,ca.camp_nombre')
                 ->from('sys_tareas_op t')
                 ->join('sys_op o','t.id_op = o.id_op')
                 ->join('sys_categoria c', 't.id_categoria = c.id_categoria', 'left')
                 ->join('sys_status s', 't.id_estado = s.id_status')
                 ->join('sys_unidad_negocio un', 't.id_unidad = un.id_unidad','left')
                 ->join('sys_clients cl', 'o.id_cliente = cl.id_client')
+                ->join('cat_campanas ca', 'ca.camp_id = o.id_campana')
                 ->join('sys_users u','o.id_user = u.id_users')
                 ->order_by("t.id_tarea", "desc")
                 ->get();

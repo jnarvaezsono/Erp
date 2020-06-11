@@ -119,7 +119,7 @@
                                     <th style="text-align:center;">Descripción</th>
                                     <th style="text-align:center;">Responsable</th>
                                     <th style="text-align:center;">Ppto</th>
-                                    <!--<th style="text-align:center;">TIEMPO</th>-->
+                                    <th style="text-align:center;">Campaña</th>
                                 </tr>
                             </thead>
                         </table>
