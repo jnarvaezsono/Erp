@@ -218,8 +218,8 @@
         }
     }
     
-    function OpenXmlProductivo(bill){
-        window.open('<?= base_url() ?>Billing/C_Bill/GenerateXml/'+bill, '_blank');
+    function OpenXmlProductivo(bill,piloto){
+        window.open('<?= base_url() ?>Billing/C_Bill/GenerateXml/'+bill+'/'+piloto, '_blank');
     }
     
     function OpenXmlPrueba(bill){
@@ -246,9 +246,9 @@
         },'json');
     }
     
-    function PrintXmlProductivo(bill){
+    function PrintXmlProductivo(bill,piloto){
         $(".loader_ajax2").text("Enviado Factura");
-        $.post('<?= base_url() ?>Billing/C_Bill/GenerateXml/'+bill+'/1',{},function(data){
+        $.post('<?= base_url() ?>Billing/C_Bill/GenerateXml/'+bill+'/'+piloto+'/1',{},function(data){
             if(data.res == 'OK'){
                 $('.btn1-'+bill).removeClass('btn-warning').addClass('btn-green').html('Enviada CEN');
                 swal({title: 'Enviado!', text: '', type: 'success'});
@@ -258,9 +258,9 @@
         });
     }
     
-    function PrintXmlPrueba(bill){
+    function PrintXmlPrueba(bill,piloto){
         $(".loader_ajax2").text("Enviado Factura");
-        $.post('<?= base_url() ?>Billing/C_Bill/GenerateXmlPrueba/'+bill+'/1',{},function(data){
+        $.post('<?= base_url() ?>Billing/C_Bill/GenerateXmlPrueba/'+bill+'/1',{piloto:piloto},function(data){
             if(data.res == 'OK'){
                 $('.btn1-'+bill).removeClass('btn-info').addClass('btn-warning').html('Enviada CEN');
                 swal({title: 'Enviado!', text: '', type: 'success'});

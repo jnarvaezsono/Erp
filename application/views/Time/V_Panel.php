@@ -134,7 +134,7 @@
                             <select class="form-control select2" id="tarea" style="width: 100%;" >
                                 <option value=""></option>
                                 <?php foreach ($task as $v) :?>
-                                    <option value="<?=$v->id_tarea?>"><?=$v->descripcion_op.' ('.strip_tags($v->descripcion).')'?></option>
+                                    <option value="<?=$v->id_tarea?>"><?=$v->id_tarea.' '.$v->descripcion_op.' ('.strip_tags($v->descripcion).')'?></option>
                                 <?php endforeach;?>
                             </select>
                         </div>

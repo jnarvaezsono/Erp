@@ -306,7 +306,8 @@ class C_Credit_Notes extends Controller {
             '1' => $row_cliente->nombre,
             '2' => $row_cliente->documento,
             '3' => $row_cliente->tipo_documento,
-            '4' => ''.$digito_cliente
+            '4' => ''.$digito_cliente,
+            '5' => '100'
         );
         foreach ($array_ila as $key => $value) {
             xml_add_child($ila, 'ILA_' . $key, $value);
@@ -778,7 +779,7 @@ class C_Credit_Notes extends Controller {
         }
         unlink($ruta);
     }
-    
+    /*
     function GenerateXmlPrueba($note, $bill, $n ,$send = false) {
 
          $this->load->helper('xml_helper');
@@ -1406,6 +1407,8 @@ class C_Credit_Notes extends Controller {
         }
         unlink($ruta);
     }
+     * 
+     */
     
 
 }
