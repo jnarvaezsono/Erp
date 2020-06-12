@@ -321,7 +321,7 @@ $(function () {
     });
 
     $(".attachedCot").click(function () {
-        cargar_cotizacion('<?= base_url() ?>', <?= $id ?>, 'OP', Math.random())
+        cargar_cotizacion('<?= base_url() ?>', <?= $id ?>, 'COMMENT', Math.random())
         $("#table-adjuntos-cot > tbody").html("");
         $("#modal-cot").modal();
     });
