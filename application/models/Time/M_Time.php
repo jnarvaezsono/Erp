@@ -196,5 +196,34 @@ class M_Time extends VS_Model {
 //        echo $this->db->last_query();exit();
         return $result->result();
     }
+    
+    function loadtimesDays($ini, $fin, $usuario){
+        
+        if ($usuario != 'ALL')
+            $this->db->where('t.id_users', $usuario);
+
+        $result = $this->db->select('t.fecha')
+                ->from('sys_timesheet t')
+                ->where("t.fecha BETWEEN '$ini' AND '$fin'")
+                ->group_by('t.fecha')
+                ->get();
+
+        return $result->result();
+    }
+    
+    function loadtimesDaysDetail($ini, $fin, $usuario){
+         if ($usuario != 'ALL')
+            $this->db->where('t.id_users', $usuario);
+
+        $result = $this->db->select('t.id_users,u.name AS usuario,t.fecha,SEC_TO_TIME( SUM(TIME_TO_SEC(d.time))) as tiempo')
+                ->from('sys_timesheet t')
+                ->join('sys_timesheet_detail d', 't.id_time = d.id_time','left')
+                ->join('sys_users u', 't.id_users = u.id_users')
+                ->where("t.fecha BETWEEN '$ini' AND '$fin'")
+                ->group_by('t.fecha,t.id_users')
+                ->get();
+        
+        return $result->result();
+    }
 
 }
