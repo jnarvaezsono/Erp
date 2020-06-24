@@ -30,10 +30,22 @@ class C_Credit_Notes extends Controller {
         $this->load->view('Template/V_Footer', $Footer);
     }
     
+    function Approved(){
+        $res = $this->M_Credit_Notes->UpdateData('sys_nota_credito', 'id_nota_credito', $this->input->post('note'), array('id_estado'=>9));
+        echo json_encode(array('res'=>$res));
+    }
+    
     function ListNote($factura, $ppto, $f_ini, $f_fin) {
         $order_by = $this->input->get("order");
         $rows = $this->M_Credit_Notes->ListNote($this->input->get('start'), $this->input->get("length"),$order_by[0]['dir'], $factura, $ppto,$f_ini, $f_fin);
         $all = $this->M_Credit_Notes->SelectNote($factura, $ppto, $f_ini, $f_fin);
+        
+        $btns = $this->M_Credit_Notes->LoadButtonPermissions("NOTA");
+        foreach ($btns as $btn) {
+            $button = $btn->name;
+            $$button = $button;
+        }
+        
         $array = array();
         foreach ($rows['result'] as $v) {
             
@@ -46,7 +58,8 @@ class C_Credit_Notes extends Controller {
                         <ul class="dropdown-menu u-'.$v->id_nota_credito.'" role="menu">';
             
                 $btn    .= '<li onclick="OpenPdf('.$v->id_nota_credito.','.$v->factura.')"><a href="#"><i class="fa fa-fw fa-print" ></i> Imprimir</a></li>';
-                $btn    .= ($v->est_id == 1 || $v->est_id == 44)?'<li onclick="PrintXml(' . $v->id_nota_credito . ',' . $v->factura . ')"><a href="#"></i><i class="fa fa-fw fa-send"></i> Enviar CEN</a></li>':'';
+                $btn    .= ((isset($BtnAproved)) && $v->est_id == 1)?'<li onclick="approved(' . $v->id_nota_credito . ')"><a href="#"></i><i class="fa fa-fw fa-check"></i> Aprobar</a></li>':'';
+                $btn    .= ($v->est_id == 9 || $v->est_id == 44)?'<li onclick="PrintXml(' . $v->id_nota_credito . ',' . $v->factura . ')"><a href="#"></i><i class="fa fa-fw fa-send"></i> Enviar CEN</a></li>':'';
                 $btn    .= '<li onclick="OpenXml(' . $v->id_nota_credito . ',' . $v->factura . ')"><a href="#"></i><i class="fa fa-fw fa-download"></i> Descargar XML</a></li>';
                 $btn    .= '</ul></div>';
             

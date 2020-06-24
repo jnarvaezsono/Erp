@@ -166,6 +166,15 @@
         });
     }
     
+    function approved(note){
+        $.post('<?= base_url() ?>Billing/C_Credit_Notes/Approved',{note:note},function(data){
+            if(data.res == '1'){
+                $('.btn1-'+note).removeClass('btn-success').addClass('btn-warning').html('Aprobada');
+                swal({title: 'Aprobado!', text: '', type: 'success'});
+            }
+        },'json');
+    }
+    
     function PrintXmlPrueba(note,bill){
         $(".loader_ajax2").text("Enviado Nota");
         $.post('<?= base_url() ?>Billing/C_Credit_Notes/GenerateXmlPrueba/'+note+'/'+bill+'/NC/1',{},function(data){
