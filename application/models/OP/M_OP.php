@@ -591,7 +591,7 @@ class M_OP extends VS_Model {
             $this->db->where("descripcion_op like '%". rawurldecode(trim(str_replace('%20',' ',$descripcion)))."%' ");
 
         
-        if(in_array($this->session->IdRol,array(7,2))){//ejecutivos olimpica y otras cuentas
+        if(in_array($this->session->IdRol,array(7))){//se modifico quitando el rol 2,// ejecutivos olimpica y otras cuentas
             $this->db->where("id_user", $this->session->IdUser);
         }elseif ($creador != "all"){
             $this->db->where("id_user", $creador);
