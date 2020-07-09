@@ -43,7 +43,7 @@ foreach ($result as $v) :
             <button type="button" class="btn btn-block btn-primary btn-sm" onclick="imprimir()">Imprimir</button>
             <?php endif; ?>
             <?php if($printOrder != 0): ?>
-                <button type="button" class="btn btn-block btn-primary btn-sm" onclick="imprimirPrevia()">Vista Previa</button>
+                <!--<button type="button" class="btn btn-block btn-primary btn-sm" onclick="imprimirPrevia()">Vista Previa</button>-->
             <?php endif; ?>
             <div id="logo">
                 <img src="<?=base_url()?>dist/img/header-ordenes-sonovista1.jpg">
