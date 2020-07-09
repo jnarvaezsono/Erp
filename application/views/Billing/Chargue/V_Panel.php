@@ -44,10 +44,30 @@
                 </div>
             </div>
             <div class="col-md-12" id="cont-file">
-                
+
             </div>
-            
+
         </div>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div id="fileTreeDemo_1" style="overflow-y: scroll;max-height: 400px;" class="demo"></div>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div id="fileTreeDemo_2" style="overflow-y: scroll;max-height: 400px;" class="demo"></div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
     </section>
 </div>
 
@@ -55,8 +75,32 @@
 <script>
     $(document).ready(function () {
 
+
+        $('#fileTreeDemo_1').fileTree({
+            root: '../../../Cargue/M/',
+            script: '<?= base_url() ?>dist/jqueryFileTree/connectors/cargue.php?folder=M',
+            folderEvent: 'click',
+            expandSpeed: 750,
+            collapseSpeed: 750,
+            expandEasing: 'easeOutBounce',
+            collapseEasing: 'easeOutBounce',
+            loadMessage: 'Un momento...'
+        });
+
+        $('#fileTreeDemo_2').fileTree({
+            root: '../../../Cargue/I/',
+            script: '<?= base_url() ?>dist/jqueryFileTree/connectors/cargue.php?folder=I',
+            folderEvent: 'click',
+            expandSpeed: 750,
+            collapseSpeed: 750,
+            expandEasing: 'easeOutBounce',
+            collapseEasing: 'easeOutBounce',
+            loadMessage: 'Un momento...'
+        });
+
+
         $('#id_fecha').daterangepicker({format: 'YYYY-MM-DD'});
-        
+
         $('#import').filer({
             showThumbs: true,
             addMore: true,
@@ -64,7 +108,7 @@
             limit: 1,
             extensions: ["xls", "xlsx"]
         });
-        
+
         $('.down-xls').click(function () {
 
             if ($("#id_fecha").val() != '') {
@@ -94,9 +138,9 @@
         });
 
     });
-    
-    function Upexcelfile(){
-        if($("#import").val() != ''){
+
+    function Upexcelfile() {
+        if ($("#import").val() != '') {
             var formData = new FormData($('#form-import')[0]);
 
             $.ajax({
@@ -106,27 +150,27 @@
                 success: function (data) {
                     var obj = jQuery.parseJSON(data);
                     if (obj.res == "OK") {
-                        if(obj.opcion[1] == 0){
-                            if(obj.opcion[0].length <= 0 ){
+                        if (obj.opcion[1] == 0) {
+                            if (obj.opcion[0].length <= 0) {
                                 swal({title: 'Atención!', text: 'El archivo esta vacio', type: 'warning'});
-                            }else{
-                                var texto ='';
-                                $.each(obj.opcion[0],function(e,i){
-                                    texto += i+' - ';
+                            } else {
+                                var texto = '';
+                                $.each(obj.opcion[0], function (e, i) {
+                                    texto += i + ' - ';
                                 });
                                 swal({title: 'Atención!', text: texto, type: 'warning'});
                             }
-                        }else{
+                        } else {
                             $('#import').trigger("filer.reset");
-                            var img = '<a href="<?=base_url()?>Cargue/I/PB'+obj.opcion[4]+'" download="PB'+obj.opcion[4]+'">';
-                                img += '<img src="<?=base_url()?>dist/img/plane.png" class="img-circle" alt="User Image" style="width: 100px;cursor: pointer" title="DT'+obj.opcion[4]+'">';
-                                img += '</a>';
-                            img += '<a href="<?=base_url()?>Cargue/M/DT'+obj.opcion[5]+'" download="DT'+obj.opcion[5]+'">';
-                                img += '<img src="<?=base_url()?>dist/img/plane.png" class="img-circle" alt="User Image" style="width: 100px;cursor: pointer" title="DT'+obj.opcion[5]+'">';
+                            var img = '<a href="<?= base_url() ?>Cargue/I/PB' + obj.opcion[4] + '" download="PB' + obj.opcion[4] + '">';
+                            img += '<img src="<?= base_url() ?>dist/img/plane.png" class="img-circle" alt="User Image" style="width: 100px;cursor: pointer" title="DT' + obj.opcion[4] + '">';
                             img += '</a>';
-                            
+                            img += '<a href="<?= base_url() ?>Cargue/M/DT' + obj.opcion[5] + '" download="DT' + obj.opcion[5] + '">';
+                            img += '<img src="<?= base_url() ?>dist/img/plane.png" class="img-circle" alt="User Image" style="width: 100px;cursor: pointer" title="DT' + obj.opcion[5] + '">';
+                            img += '</a>';
+
                             $('#cont-file').html(img);
-                            swal({title: 'OK!', text: obj.opcion[2]+' Facturas ingresadas', type: 'success'});
+                            swal({title: 'OK!', text: obj.opcion[2] + ' Facturas ingresadas', type: 'success'});
                             //window.location.replace('<?= base_url() ?>Tv/Edit/'+id+'/5');
                         }
                     } else {
@@ -140,7 +184,7 @@
             }).fail(function (error) {
                 swal({title: 'Error Toma un screem y envialo a sistemas!', text: error.responseText, type: 'error'});
             });
-        }  
+        }
     }
 
 </script>

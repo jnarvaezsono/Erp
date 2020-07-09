@@ -14,13 +14,13 @@ class C_Chargue extends Controller {
         $array['menus'] = $this->M_Main->ListMenu();
 
         $Header['menu'] = $this->load->view('Template/Menu/V_Menu', $array, true);
-        $Header['array_css'] = array(ALERTIFY_CSS, ALERTIFY_CSS2, SWEETALERT_CSS, RANGOPICKER_CSS, FILER_CSS);
+        $Header['array_css'] = array(ALERTIFY_CSS, ALERTIFY_CSS2, SWEETALERT_CSS, RANGOPICKER_CSS, FILER_CSS, TREE_CSS);
         $this->load->view('Template/V_Header', $Header);
 
         $this->load->view('Billing/Chargue/V_Panel');
 
         $Footer['sidebar_tabs'] = $this->load->view('Template/V_sidebar_tabs', null, true);
-        $Footer['array_js'] = array(ALERTIFY_JS, MOMENT, SWEETALERT_JS, RANGOPICKER_JS, FILER_JS);
+        $Footer['array_js'] = array(ALERTIFY_JS, MOMENT, SWEETALERT_JS, RANGOPICKER_JS, FILER_JS, TREE_JS, TREE_JS2);
         $this->load->view('Template/V_Footer', $Footer);
     }
 
@@ -79,7 +79,7 @@ class C_Chargue extends Controller {
         $loop = ($sheet->getCell("A{$row}")->getValue() == '') ? false : true;
 
         while ($loop) {
-            if ($sheet->getCell("A{$row}")->getValue() != '' && !empty($sheet->getCell("I{$row}")->getValue()) && !empty($sheet->getCell("C{$row}")->getValue()) && !empty($sheet->getCell("C{$row}")->getValue()) && $sheet->getCell("C{$row}")->getValue() != 'P' ) {
+            if ($sheet->getCell("A{$row}")->getValue() != '' && !empty($sheet->getCell("I{$row}")->getValue()) && !empty($sheet->getCell("C{$row}")->getValue()) && !empty($sheet->getCell("C{$row}")->getValue()) && $sheet->getCell("C{$row}")->getValue() != 'P') {
 
                 $arr = array(
                     'fecha' => trim($sheet->getCell("A{$row}")->getValue()),
@@ -123,7 +123,7 @@ class C_Chargue extends Controller {
             }
         }
 
-        $createFiles = array('c_i','c_m');
+        $createFiles = array('c_i', 'c_m');
         if (count($details) > 0 && count($error) <= 0):
             $insert = $this->M_Chargue->SaveImportDetail($details);
             if ($insert == 1) {
@@ -135,19 +135,19 @@ class C_Chargue extends Controller {
         $objXLS->disconnectWorksheets();
         unset($objXLS);
         unlink(dirname(__FILE__) . '/../../../Adjuntos/temp/' . $name);
-        return array("0" => $error, "1" => $insert, "2" => count($details), "4"=>$createFiles['c_i'], "5"=>$createFiles['c_m']);
+        return array("0" => $error, "1" => $insert, "2" => count($details), "4" => $createFiles['c_i'], "5" => $createFiles['c_m']);
     }
 
     function generateFieldSAP() {
         $rowData = $this->M_Chargue->infoConsecutive();
         $rowI = $this->M_Chargue->ListBill('I');
         $rowM = $this->M_Chargue->ListBill('E');
-        
+
         $consecutivoM = 0;
         $consecutivoI = 0;
-        
+
         if ($rowM['num'] > 0) {
-            
+
             $ruta = dirname(__FILE__) . '/../../../Cargue/M';
             $consecutivoM = str_pad($rowData->c_m, 10, "0", STR_PAD_LEFT);
             $nomArchivo = "DT" . $consecutivoM;
@@ -157,27 +157,27 @@ class C_Chargue extends Controller {
             $fp = fopen($filename1, "w");
 
             foreach ($rowM['result'] as $v) {
-                $cabecera = '1'.$v->fecha.'DT'.'9200'.$v->fecha.DATE('m').str_pad("COP",5,' ',STR_PAD_RIGHT).str_pad($v->factura,16,' ',STR_PAD_RIGHT).str_pad($v->producto,25,' ',STR_PAD_RIGHT);
-                $det1 = '2'.str_pad('BBSEG',30,' ',STR_PAD_RIGHT).'01'.str_pad($v->sap_cliente,17,' ',STR_PAD_RIGHT).'/'.str_pad($v->valor_base,13,'0',STR_PAD_LEFT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",16,' ',STR_PAD_RIGHT).'/'.str_pad("/",10,' ',STR_PAD_RIGHT).str_pad($v->ppto,18,' ',STR_PAD_RIGHT).str_pad($v->campana,50,' ',STR_PAD_RIGHT).str_pad('/',10,' ',STR_PAD_RIGHT).str_pad("/",12,' ',STR_PAD_RIGHT).str_pad("/",12,' ',STR_PAD_RIGHT).str_pad($v->sap_cliente,20,' ',STR_PAD_RIGHT);
-                $det2 = '2'.str_pad('BBSEG',30,' ',STR_PAD_RIGHT).'50'.str_pad('2815100198',17,' ',STR_PAD_RIGHT).'/'.str_pad($v->bruto,13,'0',STR_PAD_LEFT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",16,' ',STR_PAD_RIGHT).'/'.str_pad("/",10,' ',STR_PAD_RIGHT).str_pad($v->ppto,18,' ',STR_PAD_RIGHT).str_pad($v->proveedor,50,' ',STR_PAD_RIGHT).str_pad('/',10,' ',STR_PAD_RIGHT).str_pad($v->sap_proveedor,12,' ',STR_PAD_RIGHT).str_pad("COSTO",12,' ',STR_PAD_RIGHT).str_pad($v->sap_cliente,20,' ',STR_PAD_RIGHT);
-                if($v->iva != '0'){
-                    $det3 = '2'.str_pad('BBSEG',30,' ',STR_PAD_RIGHT).'50'.str_pad('2815100197',17,' ',STR_PAD_RIGHT).'/'.str_pad($v->iva,13,'0',STR_PAD_LEFT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",35,' ',STR_PAD_RIGHT).str_pad("/",16,' ',STR_PAD_RIGHT).'/'.str_pad("/",10,' ',STR_PAD_RIGHT).str_pad($v->ppto,18,' ',STR_PAD_RIGHT).str_pad($v->proveedor,50,' ',STR_PAD_RIGHT).str_pad('/',10,' ',STR_PAD_RIGHT).str_pad($v->sap_proveedor,12,' ',STR_PAD_RIGHT).str_pad("IVA",12,' ',STR_PAD_RIGHT).str_pad($v->sap_cliente,20,' ',STR_PAD_RIGHT);
+                $cabecera = '1' . $v->fecha . 'DT' . '9200' . $v->fecha . DATE('m') . str_pad("COP", 5, ' ', STR_PAD_RIGHT) . str_pad($v->factura, 16, ' ', STR_PAD_RIGHT) . str_pad($v->producto, 25, ' ', STR_PAD_RIGHT);
+                $det1 = '2' . str_pad('BBSEG', 30, ' ', STR_PAD_RIGHT) . '01' . str_pad($v->sap_cliente, 17, ' ', STR_PAD_RIGHT) . '/' . str_pad($v->valor_base, 13, '0', STR_PAD_LEFT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 16, ' ', STR_PAD_RIGHT) . '/' . str_pad("/", 10, ' ', STR_PAD_RIGHT) . str_pad($v->ppto, 18, ' ', STR_PAD_RIGHT) . str_pad($v->campana, 50, ' ', STR_PAD_RIGHT) . str_pad('/', 10, ' ', STR_PAD_RIGHT) . str_pad("/", 12, ' ', STR_PAD_RIGHT) . str_pad("/", 12, ' ', STR_PAD_RIGHT) . str_pad($v->sap_cliente, 20, ' ', STR_PAD_RIGHT);
+                $det2 = '2' . str_pad('BBSEG', 30, ' ', STR_PAD_RIGHT) . '50' . str_pad('2815100198', 17, ' ', STR_PAD_RIGHT) . '/' . str_pad($v->bruto, 13, '0', STR_PAD_LEFT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 16, ' ', STR_PAD_RIGHT) . '/' . str_pad("/", 10, ' ', STR_PAD_RIGHT) . str_pad($v->ppto, 18, ' ', STR_PAD_RIGHT) . str_pad($v->proveedor, 50, ' ', STR_PAD_RIGHT) . str_pad('/', 10, ' ', STR_PAD_RIGHT) . str_pad($v->sap_proveedor, 12, ' ', STR_PAD_RIGHT) . str_pad("COSTO", 12, ' ', STR_PAD_RIGHT) . str_pad($v->sap_cliente, 20, ' ', STR_PAD_RIGHT);
+                if ($v->iva != '0') {
+                    $det3 = '2' . str_pad('BBSEG', 30, ' ', STR_PAD_RIGHT) . '50' . str_pad('2815100197', 17, ' ', STR_PAD_RIGHT) . '/' . str_pad($v->iva, 13, '0', STR_PAD_LEFT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 35, ' ', STR_PAD_RIGHT) . str_pad("/", 16, ' ', STR_PAD_RIGHT) . '/' . str_pad("/", 10, ' ', STR_PAD_RIGHT) . str_pad($v->ppto, 18, ' ', STR_PAD_RIGHT) . str_pad($v->proveedor, 50, ' ', STR_PAD_RIGHT) . str_pad('/', 10, ' ', STR_PAD_RIGHT) . str_pad($v->sap_proveedor, 12, ' ', STR_PAD_RIGHT) . str_pad("IVA", 12, ' ', STR_PAD_RIGHT) . str_pad($v->sap_cliente, 20, ' ', STR_PAD_RIGHT);
                 }
-                fwrite($fp,$cabecera."\r". PHP_EOL);
-                fwrite($fp,$det1."\r". PHP_EOL);
-                fwrite($fp,$det2."\r". PHP_EOL);
-                if($v->iva != '0'){
-                    fwrite($fp,$det3."\r". PHP_EOL);
+                fwrite($fp, $cabecera . "\r" . PHP_EOL);
+                fwrite($fp, $det1 . "\r" . PHP_EOL);
+                fwrite($fp, $det2 . "\r" . PHP_EOL);
+                if ($v->iva != '0') {
+                    fwrite($fp, $det3 . "\r" . PHP_EOL);
                 }
                 $info = $this->getDataModule($v->modulo);
-                $this->M_Chargue->UpdateData($info['table'], $info['fieldId'], $v->ppto, array('cargado'=>1));
+                $this->M_Chargue->UpdateData($info['table'], $info['fieldId'], $v->ppto, array('cargado' => 1));
             }
-            $this->M_Chargue->UpdateData('sys_data_billing', 'nit', '890101778', array('cons_cargue_mandato'=>$rowData->c_m+1));
+            $this->M_Chargue->UpdateData('sys_data_billing', 'nit', '890101778', array('cons_cargue_mandato' => $rowData->c_m + 1));
         }
 
         if ($rowI['num'] > 0) {
             $ruta = dirname(__FILE__) . '/../../../Cargue/I';
-            
+
             $consecutivoI = str_pad($rowData->c_i, 10, "0", STR_PAD_LEFT);
             $nomArchivo = "PB" . $consecutivoI;
 
@@ -199,45 +199,44 @@ class C_Chargue extends Controller {
 
                 fwrite($fp, "$det4\r" . PHP_EOL);
                 fwrite($fp, "$det5\r" . PHP_EOL);
-
             }
-            $this->M_Chargue->UpdateData('sys_data_billing', 'nit', '890101778', array('cons_cargue_interna'=>$rowData->c_i+1));
+            $this->M_Chargue->UpdateData('sys_data_billing', 'nit', '890101778', array('cons_cargue_interna' => $rowData->c_i + 1));
         }
-        
-        return array('c_i'=> $consecutivoI, 'c_m' => $consecutivoM);
+
+        return array('c_i' => $consecutivoI, 'c_m' => $consecutivoM);
     }
-    
-    function getDataModule($tipo){
-         switch ($tipo) {
+
+    function getDataModule($tipo) {
+        switch ($tipo) {
             case 1:
-                $data = array('table'=> 'presup_avisos','fieldId'=> 'psav_id');
+                $data = array('table' => 'presup_avisos', 'fieldId' => 'psav_id');
                 break;
             case 2:
-                $data = array('table'=> 'presup_clasificados','fieldId'=> 'pscf_id');
+                $data = array('table' => 'presup_clasificados', 'fieldId' => 'pscf_id');
                 break;
             case 3:
-                $data = array('table'=> 'presup_revis','fieldId'=> 'psrev_id');
+                $data = array('table' => 'presup_revis', 'fieldId' => 'psrev_id');
                 break;
             case 4:
-                $data = array('table'=> 'presup_radio','fieldId'=> 'psrad_id');
+                $data = array('table' => 'presup_radio', 'fieldId' => 'psrad_id');
                 break;
             case 5:
-                $data = array('table'=> 'presup_tv','fieldId'=> 'pstv_id');
+                $data = array('table' => 'presup_tv', 'fieldId' => 'pstv_id');
                 break;
             case 6:
-                $data = array('table'=> 'presup_prode','fieldId'=> 'psex_id');
+                $data = array('table' => 'presup_prode', 'fieldId' => 'psex_id');
                 break;
             case 7:
-                $data = array('table'=> 'presup_prodi','fieldId'=> 'psin_id');
+                $data = array('table' => 'presup_prodi', 'fieldId' => 'psin_id');
                 break;
             case 8:
-                $data = array('table'=> 'publicidad_exterior','fieldId'=> 'pubext_id');
+                $data = array('table' => 'publicidad_exterior', 'fieldId' => 'pubext_id');
                 break;
             case 9:
-                $data = array('table'=> 'impresos','fieldId'=> 'imp_id');
+                $data = array('table' => 'impresos', 'fieldId' => 'imp_id');
                 break;
             case 10:
-                $data = array('table'=> 'art_publi','fieldId'=> 'artp_id');
+                $data = array('table' => 'art_publi', 'fieldId' => 'artp_id');
                 break;
 
             default:
@@ -361,9 +360,9 @@ class C_Chargue extends Controller {
 //                $A->setCellValue("O$y", $spa)->getStyle("O$y")->getNumberFormat()->setFormatCode("_(\"$\"* #,##0_);_(\"$\"* \(#,##0\);_(\"$\"* \"-\"??_);_(@_)");
 //                $A->setCellValue("P$y", $iva_spa)->getStyle("P$y")->getNumberFormat()->setFormatCode("_(\"$\"* #,##0_);_(\"$\"* \(#,##0\);_(\"$\"* \"-\"??_);_(@_)");
 //                $A->setCellValue("Q$y", $spa + $iva_spa)->getStyle("Q$y")->getNumberFormat()->setFormatCode("_(\"$\"* #,##0_);_(\"$\"* \(#,##0\);_(\"$\"* \"-\"??_);_(@_)");
-                $A->setCellValue("R$y", (empty($spa))?0:$ret);
+                $A->setCellValue("R$y", (empty($spa)) ? 0 : $ret);
                 $A->setCellValue("S$y", round($valor_rete))->getStyle("S$y")->getNumberFormat()->setFormatCode("_(\"$\"* #,##0_);_(\"$\"* \(#,##0\);_(\"$\"* \"-\"??_);_(@_)");
-                $A->setCellValue("T$y", (empty($spa))?0:$inRet);
+                $A->setCellValue("T$y", (empty($spa)) ? 0 : $inRet);
                 $A->setCellValue("U$y", $v->estado);
                 $A->setCellValue("V$y", utf8_decode($v->detalle));
                 $A->setCellValue("W$y", $c->id_categoria);
@@ -479,5 +478,6 @@ class C_Chargue extends Controller {
         }
         echo '</tbody></table>';
     }
+
 
 }
