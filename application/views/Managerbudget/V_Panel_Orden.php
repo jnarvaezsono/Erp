@@ -45,13 +45,48 @@
         </div>
     </section>
 </div>
+
+<?php if($table == 4): ?>
+    <div class="modal fade" id="modal-copy">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Duplicar Presupuestos</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Presupuestos</label>
+                                <select class="form-control input-sm select2" multiple="" id="pptos" name="pptos" style="width:100%">
+                                    <?php foreach ($ordenes['result'] as $value) : ?>
+                                        <option value="<?=$value->id?>"><?=$value->id?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary pull-right" onclick="CopyMasive()"><i class="fa fa-save"></i> Duplicar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
 <script>
     $(function () {
         Cargar_Tabla();
         <?php if(isset($BtnNewPpto)): ?>
             $(".dt-buttons").append('<label style="margin-left: 5px;"><a onclick="NewPpto()" class="btn btn-default btn-sm buttons-excel buttons-html5" tabindex="0" aria-controls="tabla_user" ><span><i class="fa fa-user-plus"></i> Nuevo</span></a></label>');
         <?php endif; ?>
-        
+        <?php if($table == 4 && isset($BtnDupliPpto)): ?>
+            $(".dt-buttons").append('<label style="margin-left: 5px;"><a onclick="OpenCopy()" class="btn btn-default btn-sm buttons-excel buttons-html5" ><span><i class="fa fa-copy"></i> Duplicar</span></a></label>');
+        <?php endif; ?>
         
         $('#id_fecha').daterangepicker({format: 'YYYY-MM-DD'});
         $('.select2').select2({closeOnSelect: false});

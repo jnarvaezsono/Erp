@@ -75,7 +75,10 @@ class C_Preorden extends Controller {
         }
 
         $data['proveedores'] = $this->M_Preorden->ListarProveedoresNew();
-
+        
+        if ($type == 4)
+            $data['ordenes'] = $this->M_Preorden->GetPptoCompleteInfoOrden(false, false, $type, 'all', date('Y') . '-01-01', date('Y-m-d'), 'all');
+        
         $this->load->view('Managerbudget/V_Panel_Orden', $data);
 
         $Footer['sidebar_tabs'] = $this->load->view('Template/V_sidebar_tabs', null, true);
@@ -1034,6 +1037,9 @@ class C_Preorden extends Controller {
         
         $data = $this->M_Preorden->GetPpto($this->orden, $this->tipo, $this->tabla);
         
+        unset($data->cliente);
+        unset($data->total);
+        
         switch ($this->tipo) {
             case 1:
                 $cab = 'presup_avisos';
@@ -1102,6 +1108,73 @@ class C_Preorden extends Controller {
         $this->M_Preorden->UpdateOrdProveedor($id_ppto,$this->orden,$tpo);
         $this->M_Preorden->UpdateStatusOrden($this->tipo,$this->orden, 39); 
         echo json_encode(array('ppto'=>$id_ppto,'res'=>'OK'));
+    }
+    
+    function CopyMasive() {
+        $array = explode(',', $this->input->post('pptos'));
+        sort($array);
+        $tipo = $this->input->post('tipo');
+        $errors = '';
+
+        $tabla = $this->showTable($tipo);
+        
+        $result = array('res'=>'empty');
+        foreach ($array as $value) {
+            
+            $row = $this->M_Preorden->GetPpto($value, $tipo, $tabla['cab']);
+            $validate = $this->ValidateCredit($row->cliente, false, $row->total);
+            
+            if ($validate['res'] != 'LOCKED') {
+                $result = $this->M_Preorden->Copy($tipo, $value);
+            }else{
+                if($errors != '')
+                    $errors .= ',';
+                    
+                $errors .= $value;  
+            }
+                
+        }
+        $result['errors'] = $errors;
+        echo json_encode($result);
+    }
+    
+    function showTable($tipo){
+        switch ($tipo) {
+            case 1:
+                $data['cab'] = 'pre_orden_aviso';
+                break;
+            case 2:
+                $data['cab']  = 'pre_orden_clasificado';
+                break;
+            case 3:
+                $data['cab']  = 'pre_orden_revista';
+                break;
+            case 4:
+                $data['cab']  = 'pre_orden_radio';
+                break;
+            case 5:
+                $data['cab']  = 'pre_orden_tv';
+                break;
+            case 6:
+                $data['cab']  = 'pre_orden_externa';
+                break;
+            case 7:
+                $data['cab']  = 'pre_orden_interna';
+                break;
+            case 8:
+                $data['cab']  = 'pre_orden_exterior';
+                break;
+            case 9:
+                $data['cab']  = 'pre_orden_impreso';
+                break;
+            case 10:
+                $data['cab']  = 'pre_orden_articulo';
+                break;
+
+            default:
+                break;
+        }
+        return $data;
     }
 
 }

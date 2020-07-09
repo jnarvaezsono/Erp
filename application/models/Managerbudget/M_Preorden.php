@@ -745,7 +745,7 @@ class M_Preorden extends VS_Model {
                         ->get();
                 break;
             case "2":
-                $result = $this->db->select('curdate() as pscf_fecha,pvcl_id_clie,pdcl_id,camp_id,pvcl_id_prov,tpsv_id,pscf_observacion,pscf_valor,pscf_desc,pscf_spa,pscf_iva,pscf_ivaspa,pscf_total,pscf_comentario,medio_id,usr_id,usr_id_mod,pscf_numorden,pscf_numcotizacion')
+                $result = $this->db->select('curdate() as pscf_fecha,pvcl_id_clie,pvcl_id_clie as cliente,pdcl_id,camp_id,pvcl_id_prov,tpsv_id,pscf_observacion,pscf_valor,pscf_desc,pscf_spa,pscf_iva,pscf_ivaspa,pscf_total,pscf_total  as total,pscf_comentario,medio_id,usr_id,usr_id_mod,pscf_numorden,pscf_numcotizacion')
                         ->from($tabla.' c')
                         ->where('pscf_id', $ppto)
                         ->get();
@@ -757,8 +757,8 @@ class M_Preorden extends VS_Model {
                         ->get();
                 break;
             case "4":
-                $result = $this->db->select('curdate() as psrad_fecha,pvcl_id_clie,pdcl_id,camp_id,pvcl_id_prov,tpsv_id,r.psrad_observa,r.psrad_comentario,r.psrad_valor,r.psrad_desc,r.psrad_iva,r.psrad_ivaspa,
-                                            r.psrad_spa,r.psrad_total,r.medio_id,r.usr_id,r.usr_mod,r.psrad_numorden,r.psrad_numcotizacion')
+                $result = $this->db->select('curdate() as psrad_fecha,pvcl_id_clie,pvcl_id_clie as cliente,pdcl_id,camp_id,pvcl_id_prov,tpsv_id,r.psrad_observa,r.psrad_comentario,r.psrad_valor,r.psrad_desc,r.psrad_iva,r.psrad_ivaspa,
+                                            r.psrad_spa,r.psrad_total,r.psrad_total as total,r.medio_id,r.usr_id,r.usr_mod,r.psrad_numorden,r.psrad_numcotizacion')
                         ->from($tabla.' r')
                         ->where('psrad_id', $ppto)
                         ->get();
@@ -830,5 +830,144 @@ class M_Preorden extends VS_Model {
         $this->db->where('tpo_doc', $tipo);
         $result = $this->db->update('ordenes', array('doc_id'=>$id_ppto));
     }
+    
+    function Copy($tipo, $ppto) {
+        $this->db->trans_begin();
+        $newppto = '';
+        $fecha = date('Y-m-d');
+
+        switch ($tipo) {
+            case 2:
+                $rs = $this->db->select('*')
+                                ->from('pre_orden_clasificado')
+                                ->where('pscf_id', $ppto)
+                                ->get()->row();
+
+                    unset($rs->pscf_id);
+                    $rs->pscf_fecha = $fecha;
+                    $rs->pscf_fechsfact = $fecha;
+                    $rs->presup_fechacrea = date('Y-m-d H:i:s');
+                    $rs->usr_id = $this->session->UserMedios;
+                    $rs->usr_id_mod = $this->session->UserMedios;
+                    $rs->pscf_estado = 1;
+                    $rs->num_impresiones = -1;
+                    $rs->pscf_observacion .= ' Duplicado de la preorden ' . $ppto;
+
+                    $this->db->insert('pre_orden_clasificado', $rs);
+                    $newppto = $this->db->insert_id();
+
+                    $rsdet = $this->db->select('*')
+                            ->from('det_clasi')
+                            ->where('id_preorden', $ppto)
+                            ->get();
+                    $array = array();
+                    foreach ($rsdet->result() as $d) {
+                        $array[] = array(
+                            'id_preorden' => $newppto,
+                            'dclasi_palabras' => $d->dclasi_palabras,
+                            'dclasi_numavisos' => $d->dclasi_numavisos,
+                            'dclasi_seccion' => $d->dclasi_seccion,
+                            'dclasi_titulo' => $d->dclasi_titulo,
+                            'dclasi_foto' => $d->dclasi_foto,
+                            'dclasi_vlrfoto' => $d->dclasi_vlrfoto,
+                            'dclasi_negrilla' => $d->dclasi_negrilla,
+                            'dclasi_vlrnegrilla' => $d->dclasi_vlrnegrilla,
+                            'dclasi_mayuscula' => $d->dclasi_mayuscula,
+                            'dclasi_vlrmayuscula' => $d->dclasi_vlrmayuscula,
+                            'dclasi_tarifa' => $d->dclasi_tarifa,
+                            'dclasi_detalle' => $d->dclasi_detalle,
+                            'dclasi_fondocolor' => $d->dclasi_fondocolor,
+                            'dclasi_vlrfondocolor' => $d->dclasi_vlrfondocolor,
+                            'dclasi_logogr' => $d->dclasi_logogr,
+                            'dclasi_vlrlogogr' => $d->dclasi_vlrlogogr,
+                            'dclasi_descriplogogr' => $d->dclasi_descriplogogr,
+                            'dclasi_logopeq' => $d->dclasi_logopeq,
+                            'dclasi_vlrlogopeq' => $d->dclasi_vlrlogopeq,
+                            'dclasi_descriplogopeq' => $d->dclasi_descriplogopeq,
+                            'dclasi_fechas' => $d->dclasi_fechas,
+                            'dclasi_valor' => $d->dclasi_valor,
+                            'dclasi_total' => $d->dclasi_total,
+                            'dclasi_publi' => $d->dclasi_publi,
+                            'unidad' => $d->unidad
+                        );
+                    }
+
+                    if (count($array) > 0) {
+                        $this->db->insert_batch('det_clasi', $array);
+                    }
+
+                    $orden = $this->db->query('insert into ordenes (doc_id,ord_fecha,usr_id,ord_fechaimp,tpo_doc,ord_observacion,pvcl_id_prov) '
+                            . 'select ' . $newppto . ',"' . $fecha . '","' . $this->session->UserMedios . '","' . $fecha . '",tpo_doc,concat(ord_observacion," Duplicado de la orden ",ord_id),pvcl_id_prov from ordenes where doc_id = ' . $ppto . ' and tpo_doc = "clasificado" ');
+                
+                break;
+            case 4:
+                $rs = $this->db->select('*')
+                                ->from('pre_orden_radio')
+                                ->where('psrad_id', $ppto)
+                                ->get()->row();
+
+                    unset($rs->psrad_id);
+                    $rs->psrad_fecha = $fecha;
+                    $rs->presup_fechacrea = date('Y-m-d H:i:s');
+                    $rs->usr_id = $this->session->UserMedios;
+                    $rs->usr_mod = $this->session->UserMedios;
+                    $rs->psrad_estado = 1;
+                    $rs->num_impresiones = -1;
+                    $rs->psrad_observa .= ' Duplicado de la preorden ' . $ppto;
+
+                    $this->db->insert('pre_orden_radio', $rs);
+                    $newppto = $this->db->insert_id();
+
+                    $rsdet = $this->db->select('*')
+                            ->from('det_radio')
+                            ->where('id_preorden', $ppto)
+                            ->get();
+                    $array = array();
+                    foreach ($rsdet->result() as $d) {
+                        $array[] = array(
+                            'id_preorden' => $newppto,
+                            'drad_fechaini' => $d->drad_fechaini,
+                            'drad_fechafin' => $d->drad_fechafin,
+                            'drad_frecuencia' => $d->drad_frecuencia,
+                            'drad_dias' => $d->drad_dias,
+                            'drad_seg' => $d->drad_seg,
+                            'drad_tarifa' => $d->drad_tarifa,
+                            'drad_numcuna' => $d->drad_numcuna,
+                            'drad_totalcuna' => $d->drad_totalcuna,
+                            'drad_observacion' => $d->drad_observacion,
+                            'drad_global' => $d->drad_global,
+                            'drad_detalle' => $d->drad_detalle,
+                            'progr_id' => $d->progr_id,
+                            'drad_fechas' => $d->drad_fechas,
+                            'drad_ciudad' => $d->drad_ciudad,
+                            'emis_id' => $d->emis_id,
+                            'drad_total' => $d->drad_total,
+                            'unidad' => $d->unidad,
+                        );
+                    }
+
+                    if (count($array) > 0) {
+                        $this->db->insert_batch('det_radio', $array);
+                    }
+
+                    $orden = $this->db->query('insert into ordenes (id_preorden,ord_fecha,usr_id,ord_fechaimp,tpo_doc,ord_observacion,pvcl_id_prov) '
+                            . 'select ' . $newppto . ',"' . $fecha . '","' . $this->session->UserMedios . '","' . $fecha . '",tpo_doc,concat(ord_observacion," Duplicado de la orden ",ord_id),pvcl_id_prov from ordenes where id_preorden = ' . $ppto . ' and tpo_doc = "radio" ');
+                
+                break;
+            default:
+                break;
+        }
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $res = array('res' => "Error");
+        } else {
+            $res = array('res' => "OK", "id" => $newppto);
+            $this->db->trans_commit();
+        }
+        
+        return $res;
+    }
+
 
 }
