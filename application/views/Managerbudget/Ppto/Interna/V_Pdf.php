@@ -117,23 +117,22 @@ foreach ($result as $v) :
 </body>
 <script>
     $(function(){   
-        $(document).keydown(function(e) {    
-          if ((e.ctrlKey || e.metaKey) && e.keyCode == 80) {
-            e.preventDefault();
-          }
-        });
-        
-        $(this).bind("contextmenu", function(e) {
-            e.preventDefault();
+//        $(document).keydown(function(e) {    
+//          if ((e.ctrlKey || e.metaKey) && e.keyCode == 80) {
+//            e.preventDefault();
+//          }
+//        });
+//        
+//        $(this).bind("contextmenu", function(e) {
+//            e.preventDefault();
+//        });
+        $.post('<?= base_url() ?>Managerbudget/C_Ppto/UpdatePrint',{tipo:<?=$tipo?>,ppto:<?=$v->id?>,status:5,ord:0,ord_id:0},function(){
+            window.print();
         });
     });
     
     function imprimir(){
-        if(confirm('Confirma imprimir el formato?')){
-            $.post('<?= base_url() ?>Managerbudget/C_Ppto/UpdatePrint',{tipo:<?=$tipo?>,ppto:<?=$v->id?>,status:5,ord:0,ord_id:0},function(){
-                window.print();
-            });
-        }
+        window.print();
     }
 </script>
 </html>

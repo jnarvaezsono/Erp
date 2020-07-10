@@ -356,7 +356,24 @@
     }
     
     function printPdf(id,print_order){
-        window.open('<?= base_url() ?>Managerbudget/C_Preorden/PrintPpto/'+id+'/<?= $table ?>/'+print_order, '_blank');
+        swal({
+            title: 'Confirmar impresión',
+            text: "Al imprimir el documento "+id+" este quedara inmodificable desea continuar?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Aceptar!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result) {
+                location.reload();
+                window.open('<?= base_url() ?>Managerbudget/C_Preorden/PrintPpto/'+id+'/<?= $table ?>/'+print_order, '_blank');
+            }
+        }, function (dismiss) {
+            
+        }).catch(swal.noop)
+        
     }
     
     function Cargar_Tabla() {

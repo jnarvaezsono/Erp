@@ -375,9 +375,9 @@ class C_Ppto extends Controller {
     }
 
     function UpdatePrint() {
-        if ($this->input->post('ord') != 1) {
-            $this->M_Manager->UpdateStatusPpto($this->input->post('tipo'), $this->input->post('ppto'), $this->input->post('status'));
-        } else {
+        $this->M_Manager->UpdateStatusPpto($this->input->post('tipo'), $this->input->post('ppto'), $this->input->post('status'));
+        
+        if ($this->input->post('ord') == 1) {
             $this->M_Manager->UpdateNumOrder($this->input->post('ord_id'));
         }
     }

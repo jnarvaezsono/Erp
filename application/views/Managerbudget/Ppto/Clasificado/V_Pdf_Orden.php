@@ -161,22 +161,11 @@ foreach ($result as $v) : ?>
 </body>
 <script>
     $(function(){   
-        $(document).keydown(function(e) {    
-          if ((e.ctrlKey || e.metaKey) && e.keyCode == 80) {
-            e.preventDefault();
-          }
-        });
-        
-        $(this).bind("contextmenu", function(e) {
-            e.preventDefault();
+        $.post('<?= base_url() ?>Managerbudget/C_Preorden/UpdatePrint',{tipo:<?=$tipo?>,ppto:<?=$v->id?>,status:5},function(){
         });
     });
       
     function imprimir(){
-        window.print();
-    }
-    
-    function imprimirPrevia(){
         window.print();
     }
 </script>

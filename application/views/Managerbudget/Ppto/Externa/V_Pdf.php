@@ -42,9 +42,6 @@ foreach ($result as $v) :
             <?php if($print != 0): ?>
             <button type="button" class="btn btn-block btn-primary btn-sm" onclick="imprimir()">Imprimir</button>
             <?php endif; ?>
-            <?php if($printOrder != 0): ?>
-                <!--<button type="button" class="btn btn-block btn-primary btn-sm" onclick="imprimirPrevia()">Vista Previa</button>-->
-            <?php endif; ?>
             <div id="logo">
                 <img src="<?=base_url()?>dist/img/header-ordenes-sonovista1.jpg">
             </div>
@@ -180,25 +177,13 @@ foreach ($result as $v) :
 </body>
 <script>
     $(function(){   
-        $(document).keydown(function(e) {    
-          if ((e.ctrlKey || e.metaKey) && e.keyCode == 80) {
-            e.preventDefault();
-          }
-        });
-        
-        $(this).bind("contextmenu", function(e) {
-            e.preventDefault();
+        $.post('<?= base_url() ?>Managerbudget/C_Ppto/UpdatePrint',{tipo:<?=$tipo?>,ppto:<?=$v->id?>,status:5,ord:<?=$printOrder?>,ord_id:<?=$orden->ord_id?>},function(){
+                
         });
     });
-    function imprimir(){
-        if(confirm('Confirma imprimir el formato?')){
-            $.post('<?= base_url() ?>Managerbudget/C_Ppto/UpdatePrint',{tipo:<?=$tipo?>,ppto:<?=$v->id?>,status:5,ord:<?=$printOrder?>,ord_id:<?=$orden->ord_id?>},function(){
-                window.print();
-            });
-        }
-    }
     
-    function imprimirPrevia(){
+    
+    function imprimir(){
         window.print();
     }
 </script>

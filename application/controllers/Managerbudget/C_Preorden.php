@@ -140,7 +140,7 @@ class C_Preorden extends Controller {
 
             $btn .= '<ul class="dropdown-menu u-' . $v->id . '" role="menu">';
             $btn .= '<li onclick="printPdf(' . $v->id . ',2)"><a href="#"><i class="fa fa-fw fa-print" ></i> Imprimir</a></li>';
-            $btn .= ($v->id_estado == 1) ? '<li onclick="ConvertirPpto(' . $v->id . ',' . $tipo . ',\''.$table.'\')"><a href="#"><i class="fa fa-fw fa-edit"></i> Crear PPto</a></li>' : '';
+            $btn .= ($v->id_estado == 1 || $v->id_estado == 5) ? '<li onclick="ConvertirPpto(' . $v->id . ',' . $tipo . ',\''.$table.'\')"><a href="#"><i class="fa fa-fw fa-edit"></i> Crear PPto</a></li>' : '';
             $btn .= (isset($BtnEditPpto) && ($v->id_estado == 1 && $v->impresiones == -1)) ? '<li onclick="EditPpto(' . $v->id . ',' . $tipo . ')"><a href="#"><i class="fa fa-fw fa-edit"></i> Editar</a></li>' : '';
             $btn .= (isset($BtnAnulePpto) && (($v->id_estado == 1 && $v->impresiones == -1) || ($v->id_estado == 5))) ? '<li onclick="Anule(' . $v->id . ')"><a style="color: red;" href="#"><i class="fa fa-fw fa-trash-o"></i> Anular</a></li>' : '';
             $btn .= '</ul></div>';
