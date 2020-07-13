@@ -141,6 +141,7 @@ class M_Time extends VS_Model {
         $result = $this->db->select('u.name, COUNT(t.id_time) AS dias')
                 ->from('sys_timesheet t')
                 ->join('sys_users u ',' t.id_users = u.id_users')
+                ->where("u.status",1)
                 ->where('t.id_estado = 10 AND t.num NOT IN (6, 7) AND t.festivo != 1 AND t.fecha <= CURDATE()')
                 ->group_by('t.id_users')
                 ->order_by('COUNT(t.id_time)','desc')
@@ -178,9 +179,18 @@ class M_Time extends VS_Model {
     }
 
     function LoadTimesUser($ini, $fin, $usuario) {
-
-        if ($usuario != 'ALL')
-            $this->db->where('t.id_users', $usuario);
+        
+        if ($usuario != 'ALL'){
+            if($usuario == 'DIGITAL'){
+                $this->db->where('u.rol in (9,27,28)');
+            }else if($usuario == 'OLIMPICA'){
+                $this->db->where('u.rol in (2,3,8,23,24)');
+            }else if($usuario == 'OTRAS'){
+                $this->db->where('u.rol in (6,7,25,26,30)');
+            }else{
+                $this->db->where('t.id_users', $usuario);
+            }
+        }
 
         $result = $this->db->select('u.name AS nombre,d.time AS tiempo,d.`type` AS accion,d.actividad ,IFNULL(c.nombre,cl.nombre) AS cliente,d.solicitante,d.text AS descripcion,t.fecha')
                 ->from('sys_timesheet t')
@@ -190,6 +200,7 @@ class M_Time extends VS_Model {
                 ->join('sys_op op', 'o.id_op = op.id_op', 'left')
                 ->join('sys_clients cl', 'op.id_cliente = cl.id_client', 'left')
                 ->join('sys_clients c', 'd.cliente = c.id_client', 'left')
+                ->where("u.status",1)
                 ->where("t.fecha BETWEEN '$ini' AND '$fin'")
                 ->order_by('u.name,t.fecha')
                 ->get();
@@ -199,11 +210,21 @@ class M_Time extends VS_Model {
     
     function loadtimesDays($ini, $fin, $usuario){
         
-        if ($usuario != 'ALL')
-            $this->db->where('t.id_users', $usuario);
+        if ($usuario != 'ALL'){
+            if($usuario == 'DIGITAL'){
+                $this->db->where('u.rol in (9,27,28)');
+            }else if($usuario == 'OLIMPICA'){
+                $this->db->where('u.rol in (2,3,8,23,24)');
+            }else if($usuario == 'OTRAS'){
+                $this->db->where('u.rol in (6,7,25,26,30)');
+            }else{
+                $this->db->where('t.id_users', $usuario);
+            }
+        }
 
         $result = $this->db->select('t.fecha')
                 ->from('sys_timesheet t')
+                ->join('sys_users u', 't.id_users = u.id_users')
                 ->where("t.fecha BETWEEN '$ini' AND '$fin'")
                 ->group_by('t.fecha')
                 ->get();
@@ -212,13 +233,23 @@ class M_Time extends VS_Model {
     }
     
     function loadtimesDaysDetail($ini, $fin, $usuario){
-         if ($usuario != 'ALL')
-            $this->db->where('t.id_users', $usuario);
+        if ($usuario != 'ALL'){
+            if($usuario == 'DIGITAL'){
+                $this->db->where('u.rol in (9,27,28)');
+            }else if($usuario == 'OLIMPICA'){
+                $this->db->where('u.rol in (2,3,8,23,24)');
+            }else if($usuario == 'OTRAS'){
+                $this->db->where('u.rol in (6,7,25,26,30)');
+            }else{
+                $this->db->where('t.id_users', $usuario);
+            }
+        }
 
         $result = $this->db->select('t.id_users,u.name AS usuario,t.fecha,SEC_TO_TIME( SUM(TIME_TO_SEC(d.time))) as tiempo')
                 ->from('sys_timesheet t')
                 ->join('sys_timesheet_detail d', 't.id_time = d.id_time','left')
                 ->join('sys_users u', 't.id_users = u.id_users')
+                ->where("u.status",1)
                 ->where("t.fecha BETWEEN '$ini' AND '$fin'")
                 ->group_by('t.fecha,t.id_users')
                 ->get();

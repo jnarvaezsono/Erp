@@ -16,6 +16,9 @@
                                 <div class="col-sm-8">
                                     <select class="form-control select2 " required id="users">
                                         <option value="ALL"> TODOS </option>
+                                        <option value="DIGITAL"> EQUIPO DIGITAL </option>
+                                        <option value="OLIMPICA"> EQUIPO OLIMPICA </option>
+                                        <option value="OTRAS"> EQUIPO OTRAS CTAS </option>
                                         <?php foreach ($users as $v) : ?>
                                             <option value="<?= $v->id_users ?>"><?= $v->name ?></option>
                                         <?php endforeach; ?>
