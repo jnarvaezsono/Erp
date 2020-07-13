@@ -46,6 +46,9 @@
                     </form>
                 </div>
             </section>
+            
+            <?php if(!isDirGroup($this->session->IdRol)): ?>
+            
             <section class="col-lg-8 col-md-8 connectedSortable">
                 <div class="box box-primary">
                     <div class="box-header">
@@ -162,7 +165,7 @@
                     </div>
                 </div>
             </section>
-
+            <?php endif; ?>
         </div>
     </section>
 </div>

@@ -178,7 +178,7 @@ if ( ! function_exists('isDirGroup'))
 {
 	function isDirGroup($rol){
             $return = false;
-            if(in_array($rol, array('8','26','27','5'))){
+            if(in_array($rol, array('8','26','27','5','28'))){
                 $return = true;
             }
 	    return $return;
