@@ -151,7 +151,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Tipo Orden</label>
-                                                <select class="form-control input-sm info-required" id="tipo" name="tipo" >
+                                                <select class="form-control input-sm info-required" id="tipo" name="tipo" disabled>
                                                     <option value="I" <?= ('I' == $row->tipo) ? 'selected' : '' ?>>INTERNA</option>
                                                     <option value="E" <?= ('E' == $row->tipo) ? 'selected' : '' ?>>EXTERNA</option>
                                                 </select>
